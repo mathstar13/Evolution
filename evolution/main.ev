@@ -1,0 +1,25 @@
+funct log(txt){
+cnch2 txt;
+cnc2;
+};
+funct error(txt){
+cnch3 txt;
+cnc3;
+};
+funct alert(txt){
+cnch4 txt;
+cnc4;
+};
+funct throw(n,t){
+cnch5 n;
+cnch5 t;
+cnc5;
+};
+class @defalts(static){
+	funct item(self,c){
+	cnch6 self;
+	cnch6 c;
+	cnc6;
+	return dat;
+};
+};

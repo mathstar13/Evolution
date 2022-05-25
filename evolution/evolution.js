@@ -6,13 +6,14 @@ return JSON.parse(JSON.stringify(dt));
 var cnch = {};
 var vars = rep(gvars);
 function typeify(data){
-	if(/^[ \n\t+]*'([^\']*)'[ \n\t+]*$/.test(data)){
+	var dat = {"type":"null","dt":"null","headers":{}};
+	if(/^[ \n\t+]*'([^']*)'[ \n\t+]*$/.test(data)){
 		var dt = data.match(/[ \n\t+]*'([^]*)'[ \n\t+]*/);
-		return {'type':'string','dt':dt[1],'headers':{}}
+		dat = {'type':'string','dt':dt[1],'headers':{}}
 	}
-	else if(/^[ \n\t+]*"([^\"]*)"[ \n\t+]*$/.test(data)){
+	else if(/^[ \n\t+]*"([^"]*)"[ \n\t+]*$/.test(data)){
 		var dt = data.match(/[ \n\t+]*"([^]*)"[ \n\t+]*/);
-		return {'type':'string','dt':dt[1],'headers':{}}
+		dat = {'type':'string','dt':dt[1],'headers':{}}
 	}
 	else if(/^[ \n\t+]*`([^`]*)`[ \n\t+]*$/.test(data)){
 		var data = data.match(/[ \n\t+]*`([^`]*)`[ \n\t+]*/)[1];
@@ -23,16 +24,21 @@ function typeify(data){
 			data = data.replace(dat[item],d['retd']['dt'],1);
 			d['retd'] = rep(oretd);
 		}
-		return {'type':'string','dt':data,'headers':{}}
+		dat = {'type':'string','dt':data,'headers':{}}
 	}
 	else if(/^[ \n\t+]*(true|false)[ \n\t+]*$/.test(data)){
 		var dt = data.match(/^[ \n\t+]*(true|false)[ \n\t+]*$/);
 		if (dt == 'true'){
-			return {'type':'boolean','dt':true,'headers':{}}
+			dat = {'type':'boolean','dt':true,'headers':{}}
 		}
 		else{
-			return {'type':'boolean','dt':false,'headers':{}}
+			dat = {'type':'boolean','dt':false,'headers':{}}
 		}
+	}
+	else if(/^[ \n\t+]*([0-9]+)[ \n\t+]*$/.test(data)){
+		var dt = data.match(/^[ \n\t+]*([0-9]+)[ \n\t+]*$/);
+		var v = parseInt(dt);
+		dat = {"type":"int","dt":v,"headers":{}}
 	}
 	else{
 		/*if(data.replace(/[ \n\t+]/,'') in vars){
@@ -46,14 +52,25 @@ function typeify(data){
 		}*/
 		var oretd = rep(d['retd']);
 		ev(data);
-		return d['retd'];
+		dat = rep(d['retd']);
+		d['retd'] = oretd;
 	}
+	if (dat["headers"]["rd"] == undefined){
+		dat["headers"]["rd"] = {};
+	}
+	var defalts = {"type":{'type':"string","dt":dat["type"],"headers":{"rd":{}}},"item":{"type":"funct","dt":`<function @defalts.item function>`,"headers":{"fn":{"attrib":{"c":"null"},"code":"cnch6 @self;cnch6 c;cnc6;return dat;","head":{}}}}}
+	for (item in defalts){
+		if (!item in dat["headers"]["rd"]){
+			dat["headers"]["rd"][item] = defalts[item];
+		}
+	}
+	return dat;
 }
 function error(n,d){
 	throw `${n}: ${d}`;
 }
 function cvar(n,type,dt,h={},global=false){
-	gvars[n] = {'type':type,'dt':dt,'headers':h};
+	vars[n] = {'type':type,'dt':dt,'headers':h};
 	if (global){
 		gvars[n] = {'type':type,'dt':dt,'headers':h};
 	}
@@ -83,10 +100,7 @@ function evaluate(line){
 	}
 	else if(/^[ \n\t+]*funct[ \n\t+]+([^\n ]+)[ \n\t+]*\(([^]*)\)[ \n\t+]*\{$/.test(line)){
 		d['atc'] = function(dt,data,tr){
-			window.gvars[data[0]] = data[1]
-			window.gvars[data[0]]['headers']['fn']['code'] = dt;
-			window.vars[data[0]] = data[1]
-			window.vars[data[0]]['headers']['fn']['code'] = dt;
+			cvar(data[0],"funct",`<function ${data[0]} function>`,{'fn':{'attrib':data[1],'code':dt,'head':{}}},true)
 		}
 		var dt = line.match(/[ \n\t+]*funct[ \n\t+]+([^\n ]+)[ \n\t+]*\(([^]*)\)[ \n\t+]*\{$/);
 		var att = {};
@@ -98,23 +112,24 @@ function evaluate(line){
 				att[item] = 'null'
 			}
 		}
-		d['atcd'] = [dt[1],{'type':'funct','dt':`<function ${dt[1]} function>`,'headers':{'fn':{'attrib':att,'code':'','head':{}}}}]
+		d['atcd'] = [dt[1],att]
 		d['atcc'] += 1;
 	}
 	else if(/^[ \n\t+]*([^( ]+)[ \n\t+]*\(([^]*)\)[ \n\t+]*$/.test(line)){
 		var dt = line.match(/^[ \n\t+]*([^( ]+)[ \n\t+]*\(([^]*)\)[ \n\t+]*$/);
 		var nvar = gvars;
 		var attl = [];
-		for (item of dt[2].split(/[ \n\t+]*,[ \n\t+]*/)){
+		for (item of dt[2].replace("\\,","\\comma").split(/[ \n\t+]*,[ \n\t+]*/)){
 		item = item.replace('\\comma',',')
 		if (item != ''){
-			item = typeify(item)
+			item = typeify(item);
 			attl.push(item)
 		}
 		}
 		var cnt = 0;
-		for(i in vars[dt[1]]['headers']['fn']['attrib']){
-			var n = vars[dt[1]]['headers']['fn']['attrib'][i];
+		var item = rep(typeify(dt[1]));
+		for(i in item['headers']['fn']['attrib']){
+			var n = item['headers']['fn']['attrib'][i];
 			if(attl[cnt] == undefined){
 				break
 			}
@@ -123,23 +138,67 @@ function evaluate(line){
 		cnt += 1
 			}
 		}
-		var item = vars[dt[1]];
-		vars = {'@functname':dt[1]};
+		var ov = vars;
+		if(dt[1].split(".").length > 1){
+		nvar["@self"] = rep(typeify(dt[1].split(".")[dt[1].split(".").length - 2]));
+		}
 		vars = nvar;
+		cvar("@functname","string",dt[1],{});
 		ev(item['headers']['fn']['code']);
+		vars = ov;
 	}
 	else if (/^[ \n\t+]*var[ \n\t+]*([^\n ]+)[ \n\t+]*=[ \n\t+]*([^]+)[ \n\t+]*$/.test(line)){
 		var dt = line.match(/[ \n\t+]*var[ \n\t+]*([^\n ]+)[ \n\t+]*=[ \n\t+]*([^]+)[ \n\t+]*/);
 		var t = rep(typeify(rep(dt[2])));
-		cvar(rep(dt[1]),t[0],t[1],t[2]);
+		cvar(rep(dt[1]),t["type"],t["dt"],t["headers"]);
 	}
 	else if (/^[ \n\t+]*return[ \n\t+]+([^\n ]*)[ \n\t+]*$/.test(line)){
 		var dt = line.match(/^[ \n\t+]*return[ \n\t+]+([^\n ]*)[ \n\t+]*$/);
 		d['retd'] = typeify(dt[1]);
 	}
-	else if (/^[ \n\t+]*js[ \n\t+]+([^]*)[ \n\t+]*$/.test(line)){
-		var dt = line.match(/[ \n\t+]*js[ \n\t+]+([^]*)[ \n\t+]*/);
-		eval.call(window,typeify(dt[1])['dt']);
+	else if (/^[ \n\t+]*class[ \n\t+]+([^\n ]+)[ \n\t+]*\([^\n ]+\)[ \n\t+]*\{$/.test(line)){
+		var dt = line.match(/^[ \n\t+]*class[ \n\t+]+([^\n ]+)[ \n\t+]*\([^\n ]+\)[ \n\t+]*\{$/);
+		d['atc'] = function(dt,data,tr){
+			ov = rep(vars);
+			for (v in vars){
+				if(vars[v]['headers'] == undefined){
+					error("","")
+				}
+				vars[v]['headers']["ZH"] = 1;
+			}
+			ev(dt);
+			vd = {};
+			for (v in vars){
+				if(vars[v]['headers']["ZH"] != 1){
+					vars[v]['headers']["ZH"] = 0;
+					vd[v] = vars[v];
+				}
+				/*if (ov[v] == undefined){
+					vd[v] = vars[v];
+				}
+				else{
+				/*for (var dat of Object.keys(vars[v])){
+						/*console.log(v);
+					if (vars[v][dat] != ov[v][dat]){
+						vd[v] = vars[v];
+						break;
+					}
+					if(vars[v][dat] != ov[v][dat]){
+						vd[v] = vars[v];
+					}
+				}
+				}
+				if(vars[v]['headers']["ZH"] != 1){
+					vars[v]['headers']["ZH"] = 0;
+					vd[v] = vars[v];
+				}
+				}*/
+			}
+			vars = ov;
+			cvar(data[0][1],"class",`<class ${data[0][1]} class>`,{"rd":rep(vd)},true);
+		}
+		d['atcd'] = [dt]
+		d['atcc'] += 1;
 	}
 	else if (/^[ \n\t+]*cnc[ \n\t+]*([0-9]+)[ \n\t+]*$/.test(line)){
 		var dt = line.match(/^[ \n\t+]*cnc[ \n\t+]*([0-9]+)[ \n\t+]*$/);
@@ -150,6 +209,24 @@ function evaluate(line){
 		}
 		else if (n == 3){
 			console.error(dat[0]['dt']);
+		}
+		else if (n == 4){
+			alert(dat[0]['dt']);
+		}
+		else if(n == 5){
+			error(dat[0]['dt'],dat[1]['dt']);
+		}
+		else if(n == 6){
+			if(dat[0]["type"] == "string"){
+				var v = dat[0]["dt"].charAt(parseInt(dat[1]["dt"]));
+				if (v == ""){
+					error("KeyError","No such key.")
+				}
+				cvar("dat","string",v,{})
+			}
+			else{
+				error("TypeError","Type is not available for @defalts.item.")
+			}
 		}
 		cnch[n] = [];
 	}
@@ -162,7 +239,24 @@ function evaluate(line){
 		cnch[n].push(typeify(dt[2]));
 	}
 	else{
-		if (vars[line.replace(/[ \n\t+]*/g,'')] != null){
+		if (line.includes('.')){
+			var ind = rep(typeify(line.split(".")[0]));
+			var c = 0;
+			var ov = rep(vars);
+			for(item of line.split(".")){
+				if (c == line.split(".").length-1){
+					d['retd'] = ind[item];
+				}
+				if (c == 0){
+				ind = ind["headers"]["rd"];
+				}
+				else{
+					ind = ind[item]["headers"]["rd"];
+				}
+				c += 1;
+			}
+		}
+		else if (vars[line.replace(/[ \n\t+]*/g,'')] != undefined){
 			d['retd'] = vars[line.replace(/[ \n\t+]*/g,'')];
 		}
 		else{
@@ -170,7 +264,7 @@ function evaluate(line){
 		return 'lc'
 	}
 	else{
-	error('CommandError',`Unknown command: ${line}.`)
+	error('CommandError',`Unknown command: ${line}.`);
 	}
 		}
 	}
@@ -207,7 +301,33 @@ function ev(code){
 	}
 	}
 }
+window.onload = function(){
 var dl = [];
+ev(`funct log(txt){
+cnch2 txt;
+cnc2;
+};
+funct error(txt){
+cnch3 txt;
+cnc3;
+};
+funct alert(txt){
+cnch4 txt;
+cnc4;
+};
+funct throw(n,t){
+cnch5 n;
+cnch5 t;
+cnc5;
+};
+class @defalts(static){
+	funct item(self,c){
+	cnch6 self;
+	cnch6 c;
+	cnc6;
+	return dat;
+};
+};`);
 document.querySelectorAll('ev, evolution').forEach(function(item){
 	item.style.display = 'none';
 	if (item.hasAttribute('src')){
@@ -225,3 +345,4 @@ document.querySelectorAll('ev, evolution').forEach(function(item){
 dl.forEach(function(item){
 	ev(item.innerHTML);
 });
+}
