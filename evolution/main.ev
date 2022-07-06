@@ -15,11 +15,56 @@ cnch5 n;
 cnch5 t;
 cnc5;
 };
-class @defalts(static){
+class @defaults(static){
 	funct item(self,c){
 	cnch6 self;
 	cnch6 c;
 	cnc6;
 	return dat;
 };
+funct set(self,key,value){
+	cnch7 self;
+	cnch7 key;
+	cnch7 value;
+	cnc7;
+	return dat;
+};
+funct type(self){
+	cnch13 self;
+	cnc13;
+	return dat;
+};
+};
+class doc(static){
+	funct title(){
+		cnc8;
+		return dat;
+	};
+	funct HTML(){
+		cnc9;
+		return dat;
+	};
+	funct getElement(sel,retd="innerHTML",seltype="id"){
+		cnch10 seltype;
+		cnch10 sel;
+		cnch10 retd;
+		cnc10;
+		return dat;
+	};
+	funct setElement(sel,value,it="innerHTML",seltype="id"){
+		cnch11 seltype;
+		cnch11 sel;
+		cnch11 it;
+		cnch11 value;
+		cnc11;
+		return dat;
+	};
+	funct createElement(type,tsel,sel,tseltype="id",seltype="id"){
+		cnch12 type;
+		cnch12 seltype;
+		cnch12 sel;
+		cnch12 tseltype;
+		cnch12 tsel;
+		cnc12;
+	};
 };

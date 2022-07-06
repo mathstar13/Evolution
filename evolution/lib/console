@@ -1,8 +1,0 @@
-funct log(txt){
-cnch2 txt;
-cnc2;
-};
-funct error(txt){
-cnch3 txt;
-cnc3;
-}

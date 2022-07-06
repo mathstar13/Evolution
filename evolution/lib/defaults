@@ -1,0 +1,18 @@
+funct item(self,c){
+	cnch6 self;
+	cnch6 c;
+	cnc6;
+	return dat;
+};
+funct set(self,key,value){
+	cnch7 self;
+	cnch7 key;
+	cnch7 value;
+	cnc7;
+	return dat;
+};
+funct type(self){
+	cnch13 self;
+	cnc13;
+	return dat;
+};

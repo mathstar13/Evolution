@@ -1,13 +1,134 @@
 var gvars = {};
-var d = {'atc':function(){},'atcd':[],'atcc':0,'atcdat':'','retd':{"type":"null",'dt':'null','headers':{'null':'null'}},'funct':false,'class':'','evurl':'https://evolution-lang.greatusername.repl.co/evolution/','lc':false};
+var d = {'atc':function(){},'atcd':[],'atcc':0,'atcdat':'','retd':{"type":"null",'dt':'null','headers':{'null':'null'}},'funct':false,'class':'','evurl':'https://evolution-lang.greatusername.repl.co/evolution/','lc':false,'prevt':false,'ifs':false};
+var basehead = {"rd":{"item":{"type":"funct","dt":`<function @defaults.item function>`,"headers":{"fn":{"attrib":{"c":"null"},"code":"cnch6 @self;cnch6 c;cnc6;return dat;","head":{}}}},"set":{"type":"funct","dt":"<function @defaults.set function>","headers":{"fn":{"attrib":{"key":"null","value":"null"},"code":"cnch7 @self;cnch7 key;cnch7 value;cnc7;return dat;","head":{}}}},"type":{"type":"funct","dt":"<function @defaults.type function>","headers":{"fn":{"attrib":{"":"null"},"code":"cnch13 @self;cnc13;return dat;","head":{}}}}}};
 function rep(dt){ //Replicate JSON
 return JSON.parse(JSON.stringify(dt));
 }
 var cnch = {};
 var vars = rep(gvars);
-function typeify(data){
+function escapeRegExp(string) {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+function replaceAll(str, find, replace) {
+  return str.replace(new RegExp(escapeRegExp(find), 'g'), replace);
+}
+function htmlDecode(input) {
+  var doc = new DOMParser().parseFromString(input, "text/html");
+  return doc.documentElement.textContent;
+}
+function typeify(data,fcmd=false){
 	var dat = {"type":"null","dt":"null","headers":{}};
-	if(/^[ \n\t+]*'([^']*)'[ \n\t+]*$/.test(data)){
+	if(/^[ \n\t+]*(.*)[ \n\t+]*===[ \n\t+]*(.*)[ \n\t+]*$/.test(data)){
+		var dt = data.match(/^[ \n\t+]*(.*)[ \n\t+]*===[ \n\t+]*(.*)[ \n\t+]*$/);
+		if(typeify(dt[1])['type'] == typeify(dt[2])['type']){
+		if(typeify(dt[1])['dt'] == typeify(dt[2])['dt']){
+			dat = {"type":"boolean","dt":true,"headers":{}}
+		}
+		else{
+			dat = {'type':'boolean','dt':false,'headers':{}}
+		}
+		}
+		else{
+			dat = {'type':'boolean','dt':false,'headers':{}};
+		}
+	}
+	else if(/^[ \n\t+]*(.*)[ \n\t+]*!==[ \n\t+]*(.*)[ \n\t+]*$/.test(data)){
+		var dt = data.match(/^[ \n\t+]*(.*)[ \n\t+]*!==[ \n\t+]*(.*)[ \n\t+]*$/);
+		if(typeify(dt[1])['type'] == typeify(dt[2])['type']){
+		if(typeify(dt[1])['dt'] != typeify(dt[2])['dt']){
+			dat = {"type":"boolean","dt":true,"headers":{}}
+		}
+		else{
+			dat = {'type':'boolean','dt':false,'headers':{}}
+		}
+		}
+		else{
+			dat = {'type':'boolean','dt':false,'headers':{}};
+		}
+	}
+	else if(/^[ \n\t+]*(.*)[ \n\t+]*>==[ \n\t+]*(.*)[ \n\t+]*$/.test(data)){
+		var dt = data.match(/^[ \n\t+]*(.*)[ \n\t+]*>==[ \n\t+]*(.*)[ \n\t+]*$/);
+		if(typeify(dt[1])['type'] == typeify(dt[2])['type']){
+		if(typeify(dt[1])['dt'] >= typeify(dt[2])['dt']){
+			dat = {"type":"boolean","dt":true,"headers":{}}
+		}
+		else{
+			dat = {'type':'boolean','dt':false,'headers':{}}
+		}
+		}
+		else{
+			dat = {'type':'boolean','dt':false,'headers':{}}
+		}
+	}
+	else if(/^[ \n\t+]*(.*)[ \n\t+]*<==[ \n\t+]*(.*)[ \n\t+]*$/.test(data)){
+		var dt = data.match(/^[ \n\t+]*(.*)[ \n\t+]*<==[ \n\t+]*(.*)[ \n\t+]*$/);
+		if(typeify(dt[1])['type'] == typeify(dt[2])['type']){
+		if(typeify(dt[1])['dt'] <= typeify(dt[2])['dt']){
+			dat = {"type":"boolean","dt":true,"headers":{}}
+		}
+		else{
+			dat = {'type':'boolean','dt':false,'headers':{}}
+		}
+		}
+		else{
+			dat = {'type':'boolean','dt':false,'headers':{}}
+		}
+	}
+	else if(/^[ \n\t+]*(.*)[ \n\t+]*>=[ \n\t+]*(.*)[ \n\t+]*$/.test(data)){
+		var dt = data.match(/^[ \n\t+]*(.*)[ \n\t+]*>=[ \n\t+]*(.*)[ \n\t+]*$/);
+		if(typeify(dt[1])['dt'] >= typeify(dt[2])['dt']){
+			dat = {"type":"boolean","dt":true,"headers":{}}
+		}
+		else{
+			dat = {'type':'boolean','dt':false,'headers':{}}
+		}
+	}
+	else if(/^[ \n\t+]*(.*)[ \n\t+]*<=[ \n\t+]*(.*)[ \n\t+]*$/.test(data)){
+		var dt = data.match(/^[ \n\t+]*(.*)[ \n\t+]*<=[ \n\t+]*(.*)[ \n\t+]*$/);
+		if(typeify(dt[1])['dt'] <= typeify(dt[2])['dt']){
+			dat = {"type":"boolean","dt":true,"headers":{}}
+		}
+		else{
+			dat = {'type':'boolean','dt':false,'headers':{}}
+		}
+	}
+	else if(/^[ \n\t+]*(.*)[ \n\t+]*>[ \n\t+]*(.*)[ \n\t+]*$/.test(data)){
+		var dt = data.match(/^[ \n\t+]*(.*)[ \n\t+]*>[ \n\t+]*(.*)[ \n\t+]*$/);
+		if(typeify(dt[1])['dt'] > typeify(dt[2])['dt']){
+			dat = {"type":"boolean","dt":true,"headers":{}}
+		}
+		else{
+			dat = {'type':'boolean','dt':false,'headers':{}}
+		}
+	}
+	else if(/^[ \n\t+]*(.*)[ \n\t+]*<[ \n\t+]*(.*)[ \n\t+]*$/.test(data)){
+		var dt = data.match(/^[ \n\t+]*(.*)[ \n\t+]*<[ \n\t+]*(.*)[ \n\t+]*$/);
+		if(typeify(dt[1])['dt'] < typeify(dt[2])['dt']){
+			dat = {"type":"boolean","dt":true,"headers":{}}
+		}
+		else{
+			dat = {'type':'boolean','dt':false,'headers':{}}
+		}
+	}
+	else if(/^[ \n\t+]*(.*)[ \n\t+]*==[ \n\t+]*(.*)[ \n\t+]*$/.test(data)){
+		var dt = data.match(/^[ \n\t+]*(.*)[ \n\t+]*==[ \n\t+]*(.*)[ \n\t+]*$/);
+		if(typeify(dt[1])['dt'] == typeify(dt[2])['dt']){
+			dat = {"type":"boolean","dt":true,"headers":{}}
+		}
+		else{
+			dat = {'type':'boolean','dt':false,'headers':{}}
+		}
+	}
+	else if(/^[ \n\t+]*(.*)[ \n\t+]*!=[ \n\t+]*(.*)[ \n\t+]*$/.test(data)){
+		var dt = data.match(/^[ \n\t+]*(.*)[ \n\t+]*!=[ \n\t+]*(.*)[ \n\t+]*$/);
+		if(typeify(dt[1])['dt'] != typeify(dt[2])['dt']){
+			dat = {"type":"boolean","dt":true,"headers":{}}
+		}
+		else{
+			dat = {'type':'boolean','dt':false,'headers':{}}
+		}
+	}
+	else if(/^[ \n\t+]*'([^']*)'[ \n\t+]*$/.test(data)){
 		var dt = data.match(/[ \n\t+]*'([^]*)'[ \n\t+]*/);
 		dat = {'type':'string','dt':dt[1],'headers':{}}
 	}
@@ -18,18 +139,20 @@ function typeify(data){
 	else if(/^[ \n\t+]*`([^`]*)`[ \n\t+]*$/.test(data)){
 		var data = data.match(/[ \n\t+]*`([^`]*)`[ \n\t+]*/)[1];
 		var dat = data.match(/\$\{([^}]*)\}/g);
+		if(dat != null){
 		for (item of [...Array(dat.length).keys()]){
 			var oretd = rep(d['retd']);
 			ev(dat[item].match(/\$\{([^}]*)\}/)[1]);
 			data = data.replace(dat[item],d['retd']['dt'],1);
 			d['retd'] = rep(oretd);
 		}
+		}
 		dat = {'type':'string','dt':data,'headers':{}}
 	}
 	else if(/^[ \n\t+]*(true|false)[ \n\t+]*$/.test(data)){
-		var dt = data.match(/^[ \n\t+]*(true|false)[ \n\t+]*$/);
+		var dt = data.match(/^[ \n\t+]*(true|false)[ \n\t+]*$/)[1];
 		if (dt == 'true'){
-			dat = {'type':'boolean','dt':true,'headers':{}}
+			dat = {"type":"boolean","dt":true,"headers":{}}
 		}
 		else{
 			dat = {'type':'boolean','dt':false,'headers':{}}
@@ -40,6 +163,24 @@ function typeify(data){
 		var v = parseInt(dt);
 		dat = {"type":"int","dt":v,"headers":{}}
 	}
+	else if(/^[ \n\t+]*\[([^]*)\][ \n\t+]*$/.test(data)){
+			var dt = data.match(/^[ \n\t+]*\[([^]*)\][ \n\t+]*$/);
+			var l = [];
+			for (item of ap(dt[1]).split(",")){
+				item = replaceAll(item,"\\c",",")
+				l.push(typeify(item));
+			}
+			dat = {"type":"list","dt":"<list list>",'headers':{"ld":l}};
+		}
+	else if(/^[ \n\t+]*\{([^]*)\}[ \n\t+]*$/.test(data)){
+			var dt = data.match(/^[ \n\t+]*\{([^]*)\}[ \n\t+]*$/);
+			var l = {};
+			for (item of dt[1].split(",")){
+				var itv = item.split(":");
+				l[typeify(itv[0])['dt']] = typeify(itv[1]);
+			}
+			dat = {"type":"map","dt":"<map map>",'headers':{"ld":l}};
+		}
 	else{
 		/*if(data.replace(/[ \n\t+]/,'') in vars){
 			return vars[data.replace(/[ \n\t+]/,'')];
@@ -50,21 +191,64 @@ function typeify(data){
 		else{
 		error('VarError',`Unknown var: ${data}.`)
 		}*/
+		if(fcmd){
+			if (d['lc']){
+		return 'lc'
+	}
+	else{
+	error('CommandError',`Unknown command: ${line}.`);
+	}
+		}
+		else{
 		var oretd = rep(d['retd']);
 		ev(data);
 		dat = rep(d['retd']);
 		d['retd'] = oretd;
+		}
 	}
 	if (dat["headers"]["rd"] == undefined){
 		dat["headers"]["rd"] = {};
 	}
-	var defalts = {"type":{'type':"string","dt":dat["type"],"headers":{"rd":{}}},"item":{"type":"funct","dt":`<function @defalts.item function>`,"headers":{"fn":{"attrib":{"c":"null"},"code":"cnch6 @self;cnch6 c;cnc6;return dat;","head":{}}}}}
-	for (item in defalts){
-		if (!item in dat["headers"]["rd"]){
-			dat["headers"]["rd"][item] = defalts[item];
+	var defaults = {"item":{"type":"funct","dt":`<function @defaults.item function>`,"headers":{"fn":{"attrib":{"c":"null"},"code":"cnch6 @self;cnch6 c;cnc6;return dat;","head":{}}}},"set":{"type":"funct","dt":"<function @defaults.set function>","headers":{"fn":{"attrib":{"key":"null","value":"null"},"code":"cnch7 @self;cnch7 key;cnch7 value;cnc7;return dat;","head":{}}}},"type":{"type":"funct","dt":"<function @defaults.type function>","headers":{"fn":{"attrib":{"":"null"},"code":"cnch13 @self;cnc13;return dat;","head":{}}}}}
+	for (var item in defaults){
+		if (dat["headers"]["rd"][item] == undefined){
+			dat["headers"]["rd"][item] = defaults[item];
 		}
 	}
 	return dat;
+}
+function ap(text,cchar=','){
+	var latc = [false]
+	var atct = []
+	var txt = []
+	for (var item of text){
+		txt.push(item)
+	}
+	text = ''
+	var cnt = 0
+	var lc = {'(':')','[':']','"':'"',"'":"'",'`':'`'}
+	for (var char of txt){
+		if (latc[0]){
+			if (lc[atct[0]] == char){
+				delete latc[0]
+			}
+			if (char == cchar){
+				text += '\\c'
+			}
+			else{
+				text += char
+			}
+	}
+		else{
+			if (char in lc){
+				latc.splice(0,0,true)
+				atct.splice(0,0,char)
+			}
+			text += char
+		}
+		cnt += 1
+	}
+	return text
 }
 function error(n,d){
 	throw `${n}: ${d}`;
@@ -117,9 +301,9 @@ function evaluate(line){
 	}
 	else if(/^[ \n\t+]*([^( ]+)[ \n\t+]*\(([^]*)\)[ \n\t+]*$/.test(line)){
 		var dt = line.match(/^[ \n\t+]*([^( ]+)[ \n\t+]*\(([^]*)\)[ \n\t+]*$/);
-		var nvar = gvars;
+		var nvar = rep(gvars);
 		var attl = [];
-		for (item of dt[2].replace("\\,","\\comma").split(/[ \n\t+]*,[ \n\t+]*/)){
+		for (item of replaceAll(ap(dt[2].replace("\\,","\\comma")),"\\c","\\comma").split(/[ \n\t+]*,[ \n\t+]*/)){
 		item = item.replace('\\comma',',')
 		if (item != ''){
 			item = typeify(item);
@@ -149,13 +333,62 @@ function evaluate(line){
 	}
 	else if (/^[ \n\t+]*var[ \n\t+]*([^\n ]+)[ \n\t+]*=[ \n\t+]*([^]+)[ \n\t+]*$/.test(line)){
 		var dt = line.match(/[ \n\t+]*var[ \n\t+]*([^\n ]+)[ \n\t+]*=[ \n\t+]*([^]+)[ \n\t+]*/);
-		var t = rep(typeify(rep(dt[2])));
+		var t = rep(typeify(dt[2]));
 		cvar(rep(dt[1]),t["type"],t["dt"],t["headers"]);
 	}
 	else if (/^[ \n\t+]*return[ \n\t+]+([^\n ]*)[ \n\t+]*$/.test(line)){
 		var dt = line.match(/^[ \n\t+]*return[ \n\t+]+([^\n ]*)[ \n\t+]*$/);
 		d['retd'] = typeify(dt[1]);
 	}
+	else if (/^[ \n\t+]*(else){0,1}[ \n\t+]*if[ \n\t+]*\((.*)\)[ \n\t+]*\{[ \n\t+]*$/.test(line)){
+		var dt = line.match(/^[ \n\t+]*(else){0,1}[ \n\t+]*if[ \n\t+]*\((.*)\)[ \n\t+]*\{[ \n\t+]*$/);
+		d['atc'] = function(dt,data,tr){
+			d['ifs'] = true;
+			if(data[0]){
+				ev(dt);
+				d['prevt'] = true;
+			}
+			d['ifs'] = true;
+		}
+		if(dt[1] == "else"){
+			if(!d['ifs']){
+				error("SyntaxError","Elseif without if statement before.")
+			}
+			if(d['prevt']){
+				var b = false;
+			}
+			else{
+				var b = typeify(dt[2])['dt'];
+			}
+		}
+		else{
+		var b = typeify(dt[2])['dt'];
+		}
+		d['atcd'] = [b];
+		d['atcc'] = 1;
+	}
+		else if(/^[ \n\t+]*else[ \n\t+]*\{[ \n\t+]*/.test(line)){
+			var dt = line.match(/^[ \n\t+]*else[ \n\t+]*\{[ \n\t+]*/);
+			if(!d['ifs']){
+				error("SyntaxError","Else without if statement before.")
+			}
+			if(!d['prevt']){
+				d['atc'] = function(dt,data,tr){
+					d['ifs'] = false;
+				ev(dt);
+				d['prevt'] = false;
+				}
+				d['atcd'] = [];
+				d['atcc'] = 1;
+			
+			}
+			else{
+				d['atc'] = function(dt,data,tr){
+				}
+				d['atcd'] = [];
+				d['atcc'] = 1;
+			}
+		}
 	else if (/^[ \n\t+]*class[ \n\t+]+([^\n ]+)[ \n\t+]*\([^\n ]+\)[ \n\t+]*\{$/.test(line)){
 		var dt = line.match(/^[ \n\t+]*class[ \n\t+]+([^\n ]+)[ \n\t+]*\([^\n ]+\)[ \n\t+]*\{$/);
 		d['atc'] = function(dt,data,tr){
@@ -203,7 +436,12 @@ function evaluate(line){
 	else if (/^[ \n\t+]*cnc[ \n\t+]*([0-9]+)[ \n\t+]*$/.test(line)){
 		var dt = line.match(/^[ \n\t+]*cnc[ \n\t+]*([0-9]+)[ \n\t+]*$/);
 		n = parseInt(dt[1]);
+		if (cnch[n] != undefined){
 		var dat = rep(cnch[n]);
+		}
+		else{
+			var dat = [];
+		}
 		if (n == 2){
 			console.log(dat[0]['dt']);
 		}
@@ -224,9 +462,86 @@ function evaluate(line){
 				}
 				cvar("dat","string",v,{})
 			}
+				else if(dat[0]["type"] == "list"){
+					var v = dat[0]['headers']['ld'][parseInt(dat[1]["dt"])];
+					cvar("dat",v['type'],v['dt'],basehead);
+				}
+					else if (dat[0]["type"] == "map"){
+						var k = dat[1]['dt'];
+						var v = dat[0]['headers']['ld'][k];
+						cvar("dat",v['type'],v['dt'],basehead);
+					}
 			else{
-				error("TypeError","Type is not available for @defalts.item.")
+				error("TypeError","Type is not available for @defaults.item.")
 			}
+		}
+		else if(n == 7){
+			if(dat[0]['type'] == "map"){
+				var md = dat[0]['headers']['ld'];
+				md[dat[1]['dt']] = dat[2];
+				var hd = dat[0]['headers'];
+				hd["ld"] = md;
+				cvar("dat","map",dat[0]['dt'],hd);
+			}
+			else{
+				error('TypeError',"Cannot Set item of unknown type.")
+			}
+		}
+		else if(n == 8){
+			dtdt = typeify("`"+document.title.toString()+"`");
+			cvar("dat","string",dtdt['dt'],dtdt['headers']);
+		}
+		else if(n == 9){
+			dtdt = typeify("`"+document.documentElement.innerHTML+"`");
+			cvar("dat","string",dtdt['dt'],dtdt['headers']);
+		}
+		else if(n == 10){
+			if(dat[0]['dt'] == 'id'){
+				var i = document.getElementById(dat[1]["dt"]);
+			}
+			else{
+				var i = document.querySelector(dat[1]['dt']);
+			}
+			if(dat[2]['dt'] == 'innerHTML'){
+				cvar("dat","string",i.innerHTML,basehead);
+			}
+			else{
+				cvar("dat","string",i.getAttribute(dat[2]['dt']),basehead);
+			}
+		}
+		else if(n == 11){
+			if(dat[0]['dt'] == 'id'){
+				var i = document.getElementById(dat[1]["dt"]);
+			}
+			else{
+				var i = document.querySelector(dat[1]['dt']);
+			}
+			if(dat[2]['dt'] == 'innerHTML'){
+				i.innerHTML = dat[3]['dt'];
+				cvar("dat","string",i.innerHTML,basehead);
+			}
+			else{
+				i.setAttribute(dat[2]['dt'],dat[3]['dt']);
+			}
+		}
+		else if(n == 12){
+			var e = document.createElement(dat[0]['dt']);
+			if(dat[1]['dt'] == 'id'){
+				var i = document.getElementById(dat[2]["dt"]);
+			}
+			else{
+				var i = document.querySelector(dat[2]['dt']);
+			}
+			if(dat[3]['dt'] == 'id'){
+				e.id = dat[4]['dt'];
+			}
+			else{
+				e.setAttribute(dat[3]['dt'],dat[4]['dt']);
+			}
+			i.appendChild(e);
+		}
+		else if(n == 13){
+			cvar("dat","string",dat[0]['type'],basehead);
 		}
 		cnch[n] = [];
 	}
@@ -238,6 +553,9 @@ function evaluate(line){
 		}
 		cnch[n].push(typeify(dt[2]));
 	}
+		else if(/^[ +\n\t]*getvars[ +\n\t]*$/.test(line)){
+			console.log(vars);
+		}
 	else{
 		if (line.includes('.')){
 			var ind = rep(typeify(line.split(".")[0]));
@@ -260,24 +578,32 @@ function evaluate(line){
 			d['retd'] = vars[line.replace(/[ \n\t+]*/g,'')];
 		}
 		else{
-	if (d['lc']){
-		return 'lc'
-	}
-	else{
-	error('CommandError',`Unknown command: ${line}.`);
-	}
+			typeify(line,true)
 		}
 	}
 }
 function ev(code){
+	code = htmlDecode(code);
 	code = code.replace(/[ \n\t+]*\/#[^]*#\/[ \n\t+]*/g,'');
 	code = code.replace(/\/\/[^\n]*/g,'')
+	code = ap(code,";");
 	code = code.replace(/[ \n\t+]*\)[ \n\t+]*{[ \n\t+]*/g,'){;');
+	code = code.replace(/[ \n\t+]*else[ \n\t+]*{[ \n\t+]*/g,'else{;');
 	var cd = code.split(/[ \n\t+]*;[ \n\t+]*/);
+	code = replaceAll(code,'\\c',';');
 	var cnt = 1;
 	for (line of cd){
+		line = replaceAll(line,'\\c',";");
 		if (d['atcc'] == 0){
-			evaluate(line)
+			var op = rep(d['prevt']);
+			var oifs = rep(d['ifs']);
+			evaluate(line);
+			if(op && d['prevt']){
+				d['prevt'] = false;
+			}
+			if(oifs && d['ifs']){
+				d['ifs'] = false;
+			}
 	}
 	else{
 		for (item of line.split('')){
@@ -301,8 +627,6 @@ function ev(code){
 	}
 	}
 }
-window.onload = function(){
-var dl = [];
 ev(`funct log(txt){
 cnch2 txt;
 cnc2;
@@ -320,14 +644,61 @@ cnch5 n;
 cnch5 t;
 cnc5;
 };
-class @defalts(static){
+class @defaults(static){
 	funct item(self,c){
 	cnch6 self;
 	cnch6 c;
 	cnc6;
 	return dat;
 };
+funct set(self,key,value){
+	cnch7 self;
+	cnch7 key;
+	cnch7 value;
+	cnc7;
+	return dat;
+};
+funct type(self){
+	cnch13 self;
+	cnc13;
+	return dat;
+};
+};
+class doc(static){
+	funct title(){
+		cnc8;
+		return dat;
+	};
+	funct HTML(){
+		cnc9;
+		return dat;
+	};
+	funct getElement(sel,retd="innerHTML",seltype="id"){
+		cnch10 seltype;
+		cnch10 sel;
+		cnch10 retd;
+		cnc10;
+		return dat;
+	};
+	funct setElement(sel,value,it="innerHTML",seltype="id"){
+		cnch11 seltype;
+		cnch11 sel;
+		cnch11 it;
+		cnch11 value;
+		cnc11;
+		return dat;
+	};
+	funct createElement(type,tsel,sel,tseltype="id",seltype="id"){
+		cnch12 type;
+		cnch12 seltype;
+		cnch12 sel;
+		cnch12 tseltype;
+		cnch12 tsel;
+		cnc12;
+	};
 };`);
+window.onload = function(){
+var dl = [];
 document.querySelectorAll('ev, evolution').forEach(function(item){
 	item.style.display = 'none';
 	if (item.hasAttribute('src')){
@@ -342,6 +713,12 @@ document.querySelectorAll('ev, evolution').forEach(function(item){
 	}
 	dl.push(item);
 });
+var q = document.querySelectorAll("[ev-onclick]");
+for(var i of q){
+	i.addEventListener('click', function() {
+    ev(this.getAttribute("ev-onclick"));
+  });
+}
 dl.forEach(function(item){
 	ev(item.innerHTML);
 });
