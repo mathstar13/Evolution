@@ -1,3 +1,19 @@
+/*
+Evolution Programming Language
+Copyright (C) 2022 Evolution Programming Language
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software 
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+imitations under the License.
+*/
 var gvars = {};
 var d = {'atc':function(){},'atcd':[],'atcc':0,'atcdat':'','retd':{"type":"null",'dt':'null','headers':{'null':'null'}},'funct':false,'class':'','evurl':'https://evolution-lang.greatusername.repl.co/evolution/','lc':false,'prevt':false,'ifs':false};
 var basehead = {"rd":{"item":{"type":"funct","dt":`<function @defaults.item function>`,"headers":{"fn":{"attrib":{"c":"null"},"code":"cnch6 @self;cnch6 c;cnc6;return dat;","head":{}}}},"set":{"type":"funct","dt":"<function @defaults.set function>","headers":{"fn":{"attrib":{"key":"null","value":"null"},"code":"cnch7 @self;cnch7 key;cnch7 value;cnc7;return dat;","head":{}}}},"type":{"type":"funct","dt":"<function @defaults.type function>","headers":{"fn":{"attrib":{"":"null"},"code":"cnch13 @self;cnc13;return dat;","head":{}}}}}};
@@ -180,6 +196,39 @@ function typeify(data,fcmd=false){
 				l[typeify(itv[0])['dt']] = typeify(itv[1]);
 			}
 			dat = {"type":"map","dt":"<map map>",'headers':{"ld":l}};
+		}
+		else if(/^([ \n\t+]*([^]+)[ \n\t+]*([+\-*\/%^])[ \n\t+]*([^]+))+$/.test(data)){
+			var dt = data.matchAll(/[ \n\t+]*[+\-*\/%^][ \n\t+]*/g)
+			for(var i of dt){
+				var dat = data.split(i[0]);
+				var d0 = dat[0].split(/[+\-*\/%^]/)[0];
+				if(d0 == null){
+					d0 = dat[0];
+				}
+				var d1 = dat[1].split(/[+\-*\/%^]/)[0];
+				if(d1 == null){
+					d1 = dat[1];
+				}
+				if(i == '+'){
+					data = data.replace(d0+i[0]+d1,parseInt(d0)+parseInt(d1));
+				}
+				else if(i == '-'){
+					data = data.replace(d0+i[0]+d1,parseInt(d0)-parseInt(d1));
+				}
+				else if(i == '*'){
+					data = data.replace(d0+i[0]+d1,parseInt(d0)*parseInt(d1));
+				}
+				else if(i == '/'){
+					data = data.replace(d0+i[0]+d1,parseInt(d0)/parseInt(d1));
+				}
+				else if(i == '%'){
+					data = data.replace(d0+i[0]+d1,parseInt(d0)%parseInt(d1));
+				}
+				else if(i == '^'){
+					data = data.replace(d0+i[0]+d1,Math.pow(parseInt(d0),parseInt(d1)));
+				}
+			}
+			dat = {'type':'int','dt':parseInt(data),"headers":{}}
 		}
 	else{
 		/*if(data.replace(/[ \n\t+]/,'') in vars){
