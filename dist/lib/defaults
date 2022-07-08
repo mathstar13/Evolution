@@ -16,3 +16,9 @@ funct type(self){
 	cnc13;
 	return dat;
 };
+funct concat(self,string){
+	cnch14 self;
+	cnch14 string;
+	cnc14;
+	return dat;
+};

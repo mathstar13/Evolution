@@ -15,8 +15,8 @@ See the License for the specific language governing permissions and
 imitations under the License.
 */
 var gvars = {};
-var d = {'atc':function(){},'atcd':[],'atcc':0,'atcdat':'','retd':{"type":"null",'dt':'null','headers':{'null':'null'}},'funct':false,'class':'','evurl':'https://evolution-lang.greatusername.repl.co/evolution/','lc':false,'prevt':false,'ifs':false};
-var basehead = {"rd":{"item":{"type":"funct","dt":`<function @defaults.item function>`,"headers":{"fn":{"attrib":{"c":"null"},"code":"cnch6 @self;cnch6 c;cnc6;return dat;","head":{}}}},"set":{"type":"funct","dt":"<function @defaults.set function>","headers":{"fn":{"attrib":{"key":"null","value":"null"},"code":"cnch7 @self;cnch7 key;cnch7 value;cnc7;return dat;","head":{}}}},"type":{"type":"funct","dt":"<function @defaults.type function>","headers":{"fn":{"attrib":{"":"null"},"code":"cnch13 @self;cnc13;return dat;","head":{}}}}}};
+var d = {'atc':function(){},'atcd':[],'atcc':0,'atcdat':'','retd':{"type":"null",'dt':'null','headers':{'null':'null'}},'funct':false,'class':'','evurl':'https://evolution-lang.greatusername.repl.co/evolution/','lc':false,'prevt':false,'ifs':false,'su':false,'class':false};
+var basehead = {"rd":{"item":{"type":"funct","dt":`<function @defaults.item function>`,"headers":{"fn":{"attrib":{"c":"null"},"code":"cnch6 @self;cnch6 c;cnc6;return dat;","head":{}}}},"set":{"type":"funct","dt":"<function @defaults.set function>","headers":{"fn":{"attrib":{"key":"null","value":"null"},"code":"cnch7 @self;cnch7 key;cnch7 value;cnc7;return dat;","head":{}}}},"type":{"type":"funct","dt":"<function @defaults.type function>","headers":{"fn":{"attrib":{"":"null"},"code":"cnch13 @self;cnc13;return dat;","head":{}}}},"concat":{"type":"funct","dt":"<function @defaults.concat function>","headers":{"fn":{"attrib":{"string":"null"},"code":"cnch14 @self;cnch14 string;cnc14;return dat;","head":{}}}}}};
 function rep(dt){ //Replicate JSON
 return JSON.parse(JSON.stringify(dt));
 }
@@ -34,8 +34,8 @@ function htmlDecode(input) {
 }
 function typeify(data,fcmd=false){
 	var dat = {"type":"null","dt":"null","headers":{}};
-	if(/^[ \n\t+]*(.*)[ \n\t+]*===[ \n\t+]*(.*)[ \n\t+]*$/.test(data)){
-		var dt = data.match(/^[ \n\t+]*(.*)[ \n\t+]*===[ \n\t+]*(.*)[ \n\t+]*$/);
+	if(/^[ \n\t]*(.*)[ \n\t]*===[ \n\t]*(.*)[ \n\t]*$/.test(data)){
+		var dt = data.match(/^[ \n\t]*(.*)[ \n\t]*===[ \n\t]*(.*)[ \n\t]*$/);
 		if(typeify(dt[1])['type'] == typeify(dt[2])['type']){
 		if(typeify(dt[1])['dt'] == typeify(dt[2])['dt']){
 			dat = {"type":"boolean","dt":true,"headers":{}}
@@ -48,8 +48,8 @@ function typeify(data,fcmd=false){
 			dat = {'type':'boolean','dt':false,'headers':{}};
 		}
 	}
-	else if(/^[ \n\t+]*(.*)[ \n\t+]*!==[ \n\t+]*(.*)[ \n\t+]*$/.test(data)){
-		var dt = data.match(/^[ \n\t+]*(.*)[ \n\t+]*!==[ \n\t+]*(.*)[ \n\t+]*$/);
+	else if(/^[ \n\t]*(.*)[ \n\t]*!==[ \n\t]*(.*)[ \n\t]*$/.test(data)){
+		var dt = data.match(/^[ \n\t]*(.*)[ \n\t]*!==[ \n\t]*(.*)[ \n\t]*$/);
 		if(typeify(dt[1])['type'] == typeify(dt[2])['type']){
 		if(typeify(dt[1])['dt'] != typeify(dt[2])['dt']){
 			dat = {"type":"boolean","dt":true,"headers":{}}
@@ -62,8 +62,8 @@ function typeify(data,fcmd=false){
 			dat = {'type':'boolean','dt':false,'headers':{}};
 		}
 	}
-	else if(/^[ \n\t+]*(.*)[ \n\t+]*>==[ \n\t+]*(.*)[ \n\t+]*$/.test(data)){
-		var dt = data.match(/^[ \n\t+]*(.*)[ \n\t+]*>==[ \n\t+]*(.*)[ \n\t+]*$/);
+	else if(/^[ \n\t]*(.*)[ \n\t]*>==[ \n\t]*(.*)[ \n\t]*$/.test(data)){
+		var dt = data.match(/^[ \n\t]*(.*)[ \n\t]*>==[ \n\t]*(.*)[ \n\t]*$/);
 		if(typeify(dt[1])['type'] == typeify(dt[2])['type']){
 		if(typeify(dt[1])['dt'] >= typeify(dt[2])['dt']){
 			dat = {"type":"boolean","dt":true,"headers":{}}
@@ -76,8 +76,8 @@ function typeify(data,fcmd=false){
 			dat = {'type':'boolean','dt':false,'headers':{}}
 		}
 	}
-	else if(/^[ \n\t+]*(.*)[ \n\t+]*<==[ \n\t+]*(.*)[ \n\t+]*$/.test(data)){
-		var dt = data.match(/^[ \n\t+]*(.*)[ \n\t+]*<==[ \n\t+]*(.*)[ \n\t+]*$/);
+	else if(/^[ \n\t]*(.*)[ \n\t]*<==[ \n\t]*(.*)[ \n\t]*$/.test(data)){
+		var dt = data.match(/^[ \n\t]*(.*)[ \n\t]*<==[ \n\t]*(.*)[ \n\t]*$/);
 		if(typeify(dt[1])['type'] == typeify(dt[2])['type']){
 		if(typeify(dt[1])['dt'] <= typeify(dt[2])['dt']){
 			dat = {"type":"boolean","dt":true,"headers":{}}
@@ -90,8 +90,8 @@ function typeify(data,fcmd=false){
 			dat = {'type':'boolean','dt':false,'headers':{}}
 		}
 	}
-	else if(/^[ \n\t+]*(.*)[ \n\t+]*>=[ \n\t+]*(.*)[ \n\t+]*$/.test(data)){
-		var dt = data.match(/^[ \n\t+]*(.*)[ \n\t+]*>=[ \n\t+]*(.*)[ \n\t+]*$/);
+	else if(/^[ \n\t]*(.*)[ \n\t]*>=[ \n\t]*(.*)[ \n\t]*$/.test(data)){
+		var dt = data.match(/^[ \n\t]*(.*)[ \n\t]*>=[ \n\t]*(.*)[ \n\t]*$/);
 		if(typeify(dt[1])['dt'] >= typeify(dt[2])['dt']){
 			dat = {"type":"boolean","dt":true,"headers":{}}
 		}
@@ -99,8 +99,8 @@ function typeify(data,fcmd=false){
 			dat = {'type':'boolean','dt':false,'headers':{}}
 		}
 	}
-	else if(/^[ \n\t+]*(.*)[ \n\t+]*<=[ \n\t+]*(.*)[ \n\t+]*$/.test(data)){
-		var dt = data.match(/^[ \n\t+]*(.*)[ \n\t+]*<=[ \n\t+]*(.*)[ \n\t+]*$/);
+	else if(/^[ \n\t]*(.*)[ \n\t]*<=[ \n\t]*(.*)[ \n\t]*$/.test(data)){
+		var dt = data.match(/^[ \n\t]*(.*)[ \n\t]*<=[ \n\t]*(.*)[ \n\t]*$/);
 		if(typeify(dt[1])['dt'] <= typeify(dt[2])['dt']){
 			dat = {"type":"boolean","dt":true,"headers":{}}
 		}
@@ -108,8 +108,8 @@ function typeify(data,fcmd=false){
 			dat = {'type':'boolean','dt':false,'headers':{}}
 		}
 	}
-	else if(/^[ \n\t+]*(.*)[ \n\t+]*>[ \n\t+]*(.*)[ \n\t+]*$/.test(data)){
-		var dt = data.match(/^[ \n\t+]*(.*)[ \n\t+]*>[ \n\t+]*(.*)[ \n\t+]*$/);
+	else if(/^[ \n\t]*(.*)[ \n\t]*>[ \n\t]*(.*)[ \n\t]*$/.test(data)){
+		var dt = data.match(/^[ \n\t]*(.*)[ \n\t]*>[ \n\t]*(.*)[ \n\t]*$/);
 		if(typeify(dt[1])['dt'] > typeify(dt[2])['dt']){
 			dat = {"type":"boolean","dt":true,"headers":{}}
 		}
@@ -117,8 +117,8 @@ function typeify(data,fcmd=false){
 			dat = {'type':'boolean','dt':false,'headers':{}}
 		}
 	}
-	else if(/^[ \n\t+]*(.*)[ \n\t+]*<[ \n\t+]*(.*)[ \n\t+]*$/.test(data)){
-		var dt = data.match(/^[ \n\t+]*(.*)[ \n\t+]*<[ \n\t+]*(.*)[ \n\t+]*$/);
+	else if(/^[ \n\t]*(.*)[ \n\t]*<[ \n\t]*(.*)[ \n\t]*$/.test(data)){
+		var dt = data.match(/^[ \n\t]*(.*)[ \n\t]*<[ \n\t]*(.*)[ \n\t]*$/);
 		if(typeify(dt[1])['dt'] < typeify(dt[2])['dt']){
 			dat = {"type":"boolean","dt":true,"headers":{}}
 		}
@@ -126,8 +126,8 @@ function typeify(data,fcmd=false){
 			dat = {'type':'boolean','dt':false,'headers':{}}
 		}
 	}
-	else if(/^[ \n\t+]*(.*)[ \n\t+]*==[ \n\t+]*(.*)[ \n\t+]*$/.test(data)){
-		var dt = data.match(/^[ \n\t+]*(.*)[ \n\t+]*==[ \n\t+]*(.*)[ \n\t+]*$/);
+	else if(/^[ \n\t]*(.*)[ \n\t]*==[ \n\t]*(.*)[ \n\t]*$/.test(data)){
+		var dt = data.match(/^[ \n\t]*(.*)[ \n\t]*==[ \n\t]*(.*)[ \n\t]*$/);
 		if(typeify(dt[1])['dt'] == typeify(dt[2])['dt']){
 			dat = {"type":"boolean","dt":true,"headers":{}}
 		}
@@ -135,8 +135,8 @@ function typeify(data,fcmd=false){
 			dat = {'type':'boolean','dt':false,'headers':{}}
 		}
 	}
-	else if(/^[ \n\t+]*(.*)[ \n\t+]*!=[ \n\t+]*(.*)[ \n\t+]*$/.test(data)){
-		var dt = data.match(/^[ \n\t+]*(.*)[ \n\t+]*!=[ \n\t+]*(.*)[ \n\t+]*$/);
+	else if(/^[ \n\t]*(.*)[ \n\t]*!=[ \n\t]*(.*)[ \n\t]*$/.test(data)){
+		var dt = data.match(/^[ \n\t]*(.*)[ \n\t]*!=[ \n\t]*(.*)[ \n\t]*$/);
 		if(typeify(dt[1])['dt'] != typeify(dt[2])['dt']){
 			dat = {"type":"boolean","dt":true,"headers":{}}
 		}
@@ -144,16 +144,16 @@ function typeify(data,fcmd=false){
 			dat = {'type':'boolean','dt':false,'headers':{}}
 		}
 	}
-	else if(/^[ \n\t+]*'([^']*)'[ \n\t+]*$/.test(data)){
-		var dt = data.match(/[ \n\t+]*'([^]*)'[ \n\t+]*/);
+	else if(/^[ \n\t]*'([^']*)'[ \n\t]*$/.test(data)){
+		var dt = data.match(/[ \n\t]*'([^]*)'[ \n\t]*/);
 		dat = {'type':'string','dt':dt[1],'headers':{}}
 	}
-	else if(/^[ \n\t+]*"([^"]*)"[ \n\t+]*$/.test(data)){
-		var dt = data.match(/[ \n\t+]*"([^]*)"[ \n\t+]*/);
+	else if(/^[ \n\t]*"([^"]*)"[ \n\t]*$/.test(data)){
+		var dt = data.match(/[ \n\t]*"([^]*)"[ \n\t]*/);
 		dat = {'type':'string','dt':dt[1],'headers':{}}
 	}
-	else if(/^[ \n\t+]*`([^`]*)`[ \n\t+]*$/.test(data)){
-		var data = data.match(/[ \n\t+]*`([^`]*)`[ \n\t+]*/)[1];
+	else if(/^[ \n\t]*`([^`]*)`[ \n\t]*$/.test(data)){
+		var data = data.match(/[ \n\t]*`([^`]*)`[ \n\t]*/)[1];
 		var dat = data.match(/\$\{([^}]*)\}/g);
 		if(dat != null){
 		for (item of [...Array(dat.length).keys()]){
@@ -165,8 +165,8 @@ function typeify(data,fcmd=false){
 		}
 		dat = {'type':'string','dt':data,'headers':{}}
 	}
-	else if(/^[ \n\t+]*(true|false)[ \n\t+]*$/.test(data)){
-		var dt = data.match(/^[ \n\t+]*(true|false)[ \n\t+]*$/)[1];
+	else if(/^[ \n\t]*(true|false)[ \n\t]*$/.test(data)){
+		var dt = data.match(/^[ \n\t]*(true|false)[ \n\t]*$/)[1];
 		if (dt == 'true'){
 			dat = {"type":"boolean","dt":true,"headers":{}}
 		}
@@ -174,13 +174,13 @@ function typeify(data,fcmd=false){
 			dat = {'type':'boolean','dt':false,'headers':{}}
 		}
 	}
-	else if(/^[ \n\t+]*([0-9]+)[ \n\t+]*$/.test(data)){
-		var dt = data.match(/^[ \n\t+]*([0-9]+)[ \n\t+]*$/);
+	else if(/^[ \n\t]*([0-9]+)[ \n\t]*$/.test(data)){
+		var dt = data.match(/^[ \n\t]*([0-9]+)[ \n\t]*$/);
 		var v = parseInt(dt);
 		dat = {"type":"int","dt":v,"headers":{}}
 	}
-	else if(/^[ \n\t+]*\[([^]*)\][ \n\t+]*$/.test(data)){
-			var dt = data.match(/^[ \n\t+]*\[([^]*)\][ \n\t+]*$/);
+	else if(/^[ \n\t]*\[([^]*)\][ \n\t]*$/.test(data)){
+			var dt = data.match(/^[ \n\t]*\[([^]*)\][ \n\t]*$/);
 			var l = [];
 			for (item of ap(dt[1]).split(",")){
 				item = replaceAll(item,"\\c",",")
@@ -188,54 +188,57 @@ function typeify(data,fcmd=false){
 			}
 			dat = {"type":"list","dt":"<list list>",'headers':{"ld":l}};
 		}
-	else if(/^[ \n\t+]*\{([^]*)\}[ \n\t+]*$/.test(data)){
-			var dt = data.match(/^[ \n\t+]*\{([^]*)\}[ \n\t+]*$/);
+	else if(/^[ \n\t]*\{([^]*)\}[ \n\t]*$/.test(data)){
+			var dt = data.match(/^[ \n\t]*\{([^]*)\}[ \n\t]*$/);
 			var l = {};
-			for (item of dt[1].split(",")){
+			for (item of ap(dt[1]).split(",")){
+				item = replaceAll(item,"\\c",",")
 				var itv = item.split(":");
 				l[typeify(itv[0])['dt']] = typeify(itv[1]);
 			}
 			dat = {"type":"map","dt":"<map map>",'headers':{"ld":l}};
 		}
-		else if(/^([ \n\t+]*([^]+)[ \n\t+]*([+\-*\/%^])[ \n\t+]*([^]+))+$/.test(data)){
-			var dt = data.matchAll(/[ \n\t+]*[+\-*\/%^][ \n\t+]*/g)
+		else if(/^([ \n\t]*([^]+)[ \n\t]*([+\-*\/%^])[ \n\t]*([^]+))+$/.test(data)){
+			var dt = data.matchAll(/[ \n\t]*[+\-*\/%^][ \n\t]*/g)
 			for(var i of dt){
 				var dat = data.split(i[0]);
 				var d0 = dat[0].split(/[+\-*\/%^]/)[0];
 				if(d0 == null){
 					d0 = dat[0];
 				}
+				var d0v = typeify(d0)['dt'];
 				var d1 = dat[1].split(/[+\-*\/%^]/)[0];
 				if(d1 == null){
 					d1 = dat[1];
 				}
+				var d1v = typeify(d1)['dt'];
 				if(i == '+'){
-					data = data.replace(d0+i[0]+d1,parseInt(d0)+parseInt(d1));
+					data = data.replace(d0+i[0]+d1,d0v+d1v);
 				}
 				else if(i == '-'){
-					data = data.replace(d0+i[0]+d1,parseInt(d0)-parseInt(d1));
+					data = data.replace(d0+i[0]+d1,d0v-d1v);
 				}
 				else if(i == '*'){
-					data = data.replace(d0+i[0]+d1,parseInt(d0)*parseInt(d1));
+					data = data.replace(d0+i[0]+d1,d0v*d1v);
 				}
 				else if(i == '/'){
-					data = data.replace(d0+i[0]+d1,parseInt(d0)/parseInt(d1));
+					data = data.replace(d0+i[0]+d1,d0v/d1v);
 				}
 				else if(i == '%'){
-					data = data.replace(d0+i[0]+d1,parseInt(d0)%parseInt(d1));
+					data = data.replace(d0+i[0]+d1,d0v%d1v);
 				}
 				else if(i == '^'){
-					data = data.replace(d0+i[0]+d1,Math.pow(parseInt(d0),parseInt(d1)));
+					data = data.replace(d0+i[0]+d1,Math.pow(d0v,d1v));
 				}
 			}
 			dat = {'type':'int','dt':parseInt(data),"headers":{}}
 		}
 	else{
-		/*if(data.replace(/[ \n\t+]/,'') in vars){
-			return vars[data.replace(/[ \n\t+]/,'')];
+		/*if(data.replace(/[ \n\t]/,'') in vars){
+			return vars[data.replace(/[ \n\t]/,'')];
 		}
-		else if(data.replace(/[ \n\t+]/,'') in gvars){
-			return gvars[data.replace(/[ \n\t+]/,'')];
+		else if(data.replace(/[ \n\t]/,'') in gvars){
+			return gvars[data.replace(/[ \n\t]/,'')];
 		}
 		else{
 		error('VarError',`Unknown var: ${data}.`)
@@ -258,7 +261,7 @@ function typeify(data,fcmd=false){
 	if (dat["headers"]["rd"] == undefined){
 		dat["headers"]["rd"] = {};
 	}
-	var defaults = {"item":{"type":"funct","dt":`<function @defaults.item function>`,"headers":{"fn":{"attrib":{"c":"null"},"code":"cnch6 @self;cnch6 c;cnc6;return dat;","head":{}}}},"set":{"type":"funct","dt":"<function @defaults.set function>","headers":{"fn":{"attrib":{"key":"null","value":"null"},"code":"cnch7 @self;cnch7 key;cnch7 value;cnc7;return dat;","head":{}}}},"type":{"type":"funct","dt":"<function @defaults.type function>","headers":{"fn":{"attrib":{"":"null"},"code":"cnch13 @self;cnc13;return dat;","head":{}}}}}
+	var defaults = {"item":{"type":"funct","dt":`<function @defaults.item function>`,"headers":{"fn":{"attrib":{"c":"null"},"code":"cnch6 @self;cnch6 c;cnc6;return dat;","head":{}}}},"set":{"type":"funct","dt":"<function @defaults.set function>","headers":{"fn":{"attrib":{"key":"null","value":"null"},"code":"cnch7 @self;cnch7 key;cnch7 value;cnc7;return dat;","head":{}}}},"type":{"type":"funct","dt":"<function @defaults.type function>","headers":{"fn":{"attrib":{"":"null"},"code":"cnch13 @self;cnc13;return dat;","head":{}}}},"concat":{"type":"funct","dt":"<function @defaults.concat function>","headers":{"fn":{"attrib":{"string":"null"},"code":"cnch14 @self;cnch14 string;cnc14;return dat;","head":{}}}}}
 	for (var item in defaults){
 		if (dat["headers"]["rd"][item] == undefined){
 			dat["headers"]["rd"][item] = defaults[item];
@@ -302,7 +305,15 @@ function ap(text,cchar=','){
 function error(n,d){
 	throw `${n}: ${d}`;
 }
-function cvar(n,type,dt,h={},global=false){
+function cvar(n,type,dt,h={},global=false,admin=false){
+	if(!n.match(/^[A-Za-z$_]+[A-Za-z$_0-9]*$/) & !d['su'] & !admin){
+		error("VarError",`Cannot create variable with name ${n}.`)
+	}
+	for (var item in basehead['rd']){
+		if (h[item] == undefined){
+			h[item] = basehead['rd'][item];
+		}
+	}
 	vars[n] = {'type':type,'dt':dt,'headers':h};
 	if (global){
 		gvars[n] = {'type':type,'dt':dt,'headers':h};
@@ -328,18 +339,18 @@ function callfunct(funct,attrib={}){
 	}*/
 }
 function evaluate(line){
-	if(/^([ \n\t+]*)$/.test(line)){
+	if(/^([ \n\t]*)$/.test(line)){
 		
 	}
-	else if(/^[ \n\t+]*funct[ \n\t+]+([^\n ]+)[ \n\t+]*\(([^]*)\)[ \n\t+]*\{$/.test(line)){
+	else if(/^[ \n\t]*funct[ \n\t]+([^\n ]+)[ \n\t]*\(([^]*)\)[ \n\t]*\{$/.test(line)){
 		d['atc'] = function(dt,data,tr){
-			cvar(data[0],"funct",`<function ${data[0]} function>`,{'fn':{'attrib':data[1],'code':dt,'head':{}}},true)
+			cvar(data[0],"funct",`<function ${data[0]} function>`,{'fn':{'attrib':data[1],'code':dt,'head':{}}},!d['class'])
 		}
-		var dt = line.match(/[ \n\t+]*funct[ \n\t+]+([^\n ]+)[ \n\t+]*\(([^]*)\)[ \n\t+]*\{$/);
+		var dt = line.match(/[ \n\t]*funct[ \n\t]+([^\n ]+)[ \n\t]*\(([^]*)\)[ \n\t]*\{$/);
 		var att = {};
-		for(item of dt[2].split(/[ \n\t+]*,[ \n\t+]*/)){
-			if (item.split(/[ \n\t+]*=[ \n\t+]*/).length != 1){
-				att[item.split(/[ \n\t+]*=[ \n\t+]*/)[0]] = item.split(/[ \n\t+]*=[ \n\t+]*/)[1]
+		for(item of dt[2].split(/[ \n\t]*,[ \n\t]*/)){
+			if (item.split(/[ \n\t]*=[ \n\t]*/).length != 1){
+				att[item.split(/[ \n\t]*=[ \n\t]*/)[0]] = item.split(/[ \n\t]*=[ \n\t]*/)[1]
 			}
 			else{
 				att[item] = 'null'
@@ -348,11 +359,11 @@ function evaluate(line){
 		d['atcd'] = [dt[1],att]
 		d['atcc'] += 1;
 	}
-	else if(/^[ \n\t+]*([^( ]+)[ \n\t+]*\(([^]*)\)[ \n\t+]*$/.test(line)){
-		var dt = line.match(/^[ \n\t+]*([^( ]+)[ \n\t+]*\(([^]*)\)[ \n\t+]*$/);
+	else if(/^[ \n\t]*([^( ]+)[ \n\t]*\(([^]*)\)[ \n\t]*$/.test(line)){
+		var dt = line.match(/^[ \n\t]*([^( ]+)[ \n\t]*\(([^]*)\)[ \n\t]*$/);
 		var nvar = rep(gvars);
 		var attl = [];
-		for (item of replaceAll(ap(dt[2].replace("\\,","\\comma")),"\\c","\\comma").split(/[ \n\t+]*,[ \n\t+]*/)){
+		for (item of replaceAll(ap(dt[2].replace("\\,","\\comma")),"\\c","\\comma").split(/[ \n\t]*,[ \n\t]*/)){
 		item = item.replace('\\comma',',')
 		if (item != ''){
 			item = typeify(item);
@@ -376,21 +387,21 @@ function evaluate(line){
 		nvar["@self"] = rep(typeify(dt[1].split(".")[dt[1].split(".").length - 2]));
 		}
 		vars = nvar;
-		cvar("@functname","string",dt[1],{});
+		cvar("@functname","string",dt[1],{},false,true);
 		ev(item['headers']['fn']['code']);
 		vars = ov;
 	}
-	else if (/^[ \n\t+]*var[ \n\t+]*([^\n ]+)[ \n\t+]*=[ \n\t+]*([^]+)[ \n\t+]*$/.test(line)){
-		var dt = line.match(/[ \n\t+]*var[ \n\t+]*([^\n ]+)[ \n\t+]*=[ \n\t+]*([^]+)[ \n\t+]*/);
+	else if (/^[ \n\t]*var[ \n\t]*([^\n ]+)[ \n\t]*=[ \n\t]*([^]+)[ \n\t]*$/.test(line)){
+		var dt = line.match(/[ \n\t]*var[ \n\t]*([^\n ]+)[ \n\t]*=[ \n\t]*([^]+)[ \n\t]*/);
 		var t = rep(typeify(dt[2]));
 		cvar(rep(dt[1]),t["type"],t["dt"],t["headers"]);
 	}
-	else if (/^[ \n\t+]*return[ \n\t+]+([^\n ]*)[ \n\t+]*$/.test(line)){
-		var dt = line.match(/^[ \n\t+]*return[ \n\t+]+([^\n ]*)[ \n\t+]*$/);
+	else if (/^[ \n\t]*return[ \n\t]+([^\n ]*)[ \n\t]*$/.test(line)){
+		var dt = line.match(/^[ \n\t]*return[ \n\t]+([^\n ]*)[ \n\t]*$/);
 		d['retd'] = typeify(dt[1]);
 	}
-	else if (/^[ \n\t+]*(else){0,1}[ \n\t+]*if[ \n\t+]*\((.*)\)[ \n\t+]*\{[ \n\t+]*$/.test(line)){
-		var dt = line.match(/^[ \n\t+]*(else){0,1}[ \n\t+]*if[ \n\t+]*\((.*)\)[ \n\t+]*\{[ \n\t+]*$/);
+	else if (/^[ \n\t]*(else){0,1}[ \n\t]*if[ \n\t]*\((.*)\)[ \n\t]*\{[ \n\t]*$/.test(line)){
+		var dt = line.match(/^[ \n\t]*(else){0,1}[ \n\t]*if[ \n\t]*\((.*)\)[ \n\t]*\{[ \n\t]*$/);
 		d['atc'] = function(dt,data,tr){
 			d['ifs'] = true;
 			if(data[0]){
@@ -416,8 +427,8 @@ function evaluate(line){
 		d['atcd'] = [b];
 		d['atcc'] = 1;
 	}
-		else if(/^[ \n\t+]*else[ \n\t+]*\{[ \n\t+]*/.test(line)){
-			var dt = line.match(/^[ \n\t+]*else[ \n\t+]*\{[ \n\t+]*/);
+		else if(/^[ \n\t]*else[ \n\t]*\{[ \n\t]*/.test(line)){
+			var dt = line.match(/^[ \n\t]*else[ \n\t]*\{[ \n\t]*/);
 			if(!d['ifs']){
 				error("SyntaxError","Else without if statement before.")
 			}
@@ -438,8 +449,8 @@ function evaluate(line){
 				d['atcc'] = 1;
 			}
 		}
-	else if (/^[ \n\t+]*class[ \n\t+]+([^\n ]+)[ \n\t+]*\([^\n ]+\)[ \n\t+]*\{$/.test(line)){
-		var dt = line.match(/^[ \n\t+]*class[ \n\t+]+([^\n ]+)[ \n\t+]*\([^\n ]+\)[ \n\t+]*\{$/);
+	else if (/^[ \n\t]*class[ \n\t]+([^\n ]+)[ \n\t]*\([^\n ]+\)[ \n\t]*\{$/.test(line)){
+		var dt = line.match(/^[ \n\t]*class[ \n\t]+([^\n ]+)[ \n\t]*\([^\n ]+\)[ \n\t]*\{$/);
 		d['atc'] = function(dt,data,tr){
 			ov = rep(vars);
 			for (v in vars){
@@ -448,7 +459,9 @@ function evaluate(line){
 				}
 				vars[v]['headers']["ZH"] = 1;
 			}
+			d['class'] = true;
 			ev(dt);
+			d['class'] = false;
 			vd = {};
 			for (v in vars){
 				if(vars[v]['headers']["ZH"] != 1){
@@ -482,8 +495,58 @@ function evaluate(line){
 		d['atcd'] = [dt]
 		d['atcc'] += 1;
 	}
-	else if (/^[ \n\t+]*cnc[ \n\t+]*([0-9]+)[ \n\t+]*$/.test(line)){
-		var dt = line.match(/^[ \n\t+]*cnc[ \n\t+]*([0-9]+)[ \n\t+]*$/);
+	else if(/^[ \n\t]*while[ \n\t]*\(([^]*)\)[ \n\t]*\{[ \n\t]*$/.test(line)){
+		var dt = line.match(/^[ \n\t]*while[ \n\t]*\(([^]*)\)[ \n\t]*\{[ \n\t]*$/);
+		d['atc'] = function(dt,data,tr){
+			var c = 1;
+			while(c < 100000){
+				if(typeify(data[0])['dt']){
+				ev(dt);
+				}
+				else{
+					break;
+				}
+				c++;
+			}
+		}
+		d['atcd'] = [dt[1]]
+		d['atcc'] += 1;
+	}
+		else if(/^[ \n\t]*for[ \n\t]*\(([^]*)\)[ \n\t]*\{[ \n\t]*$/.test(line)){
+		var dt = line.match(/^[ \n\t]*for[ \n\t]*\(([^]*)\)[ \n\t]*\{[ \n\t]*$/);
+		d['atc'] = function(dt,data,tr){
+			var c = 1;
+			/*while(c < 100000){
+				if(typeify(data[0])['dt']){
+				ev(dt);
+				}
+				else{
+					break;
+				}
+				c++;
+			}*/
+			if(data[1]['type'] == 'list'){
+				for(var i of data[1]['headers']['ld']){
+					cvar(data[0],i['type'],i['dt'],i['headers']);
+					ev(dt);
+				}
+			}
+			else if(data[1]['type'] == 'map'){
+				for(var i in data[1]['headers']['ld']){
+					cvar(data[0],"string",i,basehead);
+					ev(dt);
+				}
+			}
+			else{
+				error("TypeError",`Cannot loop over non-iterable type "${data[1]["type"]}".`)
+			}
+		}
+		var l = [dt[1].match(/[ \n\t]*([^ ]+)[ \n\t]*\:[ \n\t]*([^ ]+)[ \n\t]*/)[1],typeify(dt[1].match(/[ \n\t]*([^ ]+)[ \n\t]*\:[ \n\t]*([^ ]+)[ \n\t]*/)[2])];
+		d['atcd'] = l;
+		d['atcc'] += 1;
+	}
+	else if (/^[ \n\t]*cnc[ \n\t]*([0-9]+)[ \n\t]*$/.test(line)){
+		var dt = line.match(/^[ \n\t]*cnc[ \n\t]*([0-9]+)[ \n\t]*$/);
 		n = parseInt(dt[1]);
 		if (cnch[n] != undefined){
 		var dat = rep(cnch[n]);
@@ -592,17 +655,20 @@ function evaluate(line){
 		else if(n == 13){
 			cvar("dat","string",dat[0]['type'],basehead);
 		}
+		else if(n == 14){
+			cvar("dat","string",dat[0]['dt']+dat[1]['dt'],basehead);
+		}
 		cnch[n] = [];
 	}
-	else if (/^[ \n\t+]*cnch[ \n\t+]*([0-9]+)[ \n\t+]+([^]+)[ \n\t+]*$/.test(line)){
-		var dt = line.match(/^[ \n\t+]*cnch[ \n\t+]*([0-9]+)[ \n\t+]+([^]+)[ \n\t+]*$/);
+	else if (/^[ \n\t]*cnch[ \n\t]*([0-9]+)[ \n\t]+([^]+)[ \n\t]*$/.test(line)){
+		var dt = line.match(/^[ \n\t]*cnch[ \n\t]*([0-9]+)[ \n\t]+([^]+)[ \n\t]*$/);
 		n = parseInt(dt[1]);
 		if(typeof cnch[n] == 'undefined'){
 			cnch[n] = [];
 		}
 		cnch[n].push(typeify(dt[2]));
 	}
-		else if(/^[ +\n\t]*getvars[ +\n\t]*$/.test(line)){
+		else if(/^[ \n\t]*getvars[ \n\t]*$/.test(line)){
 			console.log(vars);
 		}
 	else{
@@ -623,8 +689,8 @@ function evaluate(line){
 				c += 1;
 			}
 		}
-		else if (vars[line.replace(/[ \n\t+]*/g,'')] != undefined){
-			d['retd'] = vars[line.replace(/[ \n\t+]*/g,'')];
+		else if (vars[line.replace(/[ \n\t]*/g,'')] != undefined){
+			d['retd'] = vars[line.replace(/[ \n\t]*/g,'')];
 		}
 		else{
 			typeify(line,true)
@@ -633,12 +699,12 @@ function evaluate(line){
 }
 function ev(code){
 	code = htmlDecode(code);
-	code = code.replace(/[ \n\t+]*\/#[^]*#\/[ \n\t+]*/g,'');
+	code = code.replace(/[ \n\t]*\/#[^]*#\/[ \n\t]*/g,'');
 	code = code.replace(/\/\/[^\n]*/g,'')
 	code = ap(code,";");
-	code = code.replace(/[ \n\t+]*\)[ \n\t+]*{[ \n\t+]*/g,'){;');
-	code = code.replace(/[ \n\t+]*else[ \n\t+]*{[ \n\t+]*/g,'else{;');
-	var cd = code.split(/[ \n\t+]*;[ \n\t+]*/);
+	code = code.replace(/[ \n\t]*\)[ \n\t]*{[ \n\t]*/g,'){;');
+	code = code.replace(/[ \n\t]*else[ \n\t]*{[ \n\t]*/g,'else{;');
+	var cd = code.split(/[ \n\t]*;[ \n\t]*/);
 	code = replaceAll(code,'\\c',';');
 	var cnt = 1;
 	for (line of cd){
@@ -668,7 +734,7 @@ function ev(code){
 				d['atcdat'] = ''
 				d['atct'] = []
 				d['atcc'] = 0
-				evaluate(line.replace(/[ +\n\t]*}[ +\n\t]*/,'',1));
+				evaluate(line.replace(/[ \n\t]*}[ \n\t]*/,'',1));
 		}
 		else{
 		d['atcdat'] += line+';'
@@ -676,6 +742,7 @@ function ev(code){
 	}
 	}
 }
+d['su'] = true;
 ev(`funct log(txt){
 cnch2 txt;
 cnc2;
@@ -712,6 +779,12 @@ funct type(self){
 	cnc13;
 	return dat;
 };
+funct concat(self,string){
+	cnch14 self;
+	cnch14 string;
+	cnc14;
+	return dat;
+};
 };
 class doc(static){
 	funct title(){
@@ -746,6 +819,7 @@ class doc(static){
 		cnc12;
 	};
 };`);
+d['su'] = false;
 window.onload = function(){
 var dl = [];
 document.querySelectorAll('ev, evolution').forEach(function(item){
