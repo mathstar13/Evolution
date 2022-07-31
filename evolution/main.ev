@@ -41,7 +41,7 @@ funct concat(self,string){
 	return dat;
 };
 };
-class doc(static){
+class @doc(static){
 	funct title(){
 		cnc8;
 		return dat;
@@ -73,4 +73,25 @@ class doc(static){
 		cnch12 tsel;
 		cnc12;
 	};
+};
+class @cookie(static){
+funct set(name,data,exp,path='/'){
+	cnch15 name;
+	cnch15 data;
+	cnch15 exp;
+	cnch15 path;
+	cnc15;
+};
+funct get(name){
+	cnch16 name;
+	cnc16;
+	return dat;
+};
+funct delete(name){
+	cnch15 name;
+	cnch15 "";
+	cnch15 "Thu, 01 Jan 1970 00:00:00 UTC";
+	cnch15 "/";
+	cnc15;
+};
 };

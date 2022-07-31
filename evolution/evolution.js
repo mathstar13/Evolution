@@ -14,8 +14,10 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 imitations under the License.
 */
+var ci = 0;
+var pv = {};
 var gvars = {};
-var d = {'atc':function(){},'atcd':[],'atcc':0,'atcdat':'','retd':{"type":"null",'dt':'null','headers':{'null':'null'}},'funct':false,'class':'','evurl':'https://evolution-lang.greatusername.repl.co/evolution/','lc':false,'prevt':false,'ifs':false,'su':false,'class':false};
+var d = {'atc':function(){},'atcd':[],'atcc':0,'atcdat':'','retd':{"type":"null",'dt':'null','headers':{'null':'null'}},'funct':false,'class':'','evurl':'https://evolution-lang.greatusername.repl.co/evolution/','lc':false,'prevt':false,'ifs':false,'su':false,'class':false,"fname":"@main"};
 var basehead = {"rd":{"item":{"type":"funct","dt":`<function @defaults.item function>`,"headers":{"fn":{"attrib":{"c":"null"},"code":"cnch6 @self;cnch6 c;cnc6;return dat;","head":{}}}},"set":{"type":"funct","dt":"<function @defaults.set function>","headers":{"fn":{"attrib":{"key":"null","value":"null"},"code":"cnch7 @self;cnch7 key;cnch7 value;cnc7;return dat;","head":{}}}},"type":{"type":"funct","dt":"<function @defaults.type function>","headers":{"fn":{"attrib":{"":"null"},"code":"cnch13 @self;cnc13;return dat;","head":{}}}},"concat":{"type":"funct","dt":"<function @defaults.concat function>","headers":{"fn":{"attrib":{"string":"null"},"code":"cnch14 @self;cnch14 string;cnc14;return dat;","head":{}}}}}};
 function rep(dt){ //Replicate JSON
 return JSON.parse(JSON.stringify(dt));
@@ -31,6 +33,21 @@ function replaceAll(str, find, replace) {
 function htmlDecode(input) {
   var doc = new DOMParser().parseFromString(input, "text/html");
   return doc.documentElement.textContent;
+}
+function getCookie(cname) {
+  let name = cname + "=";
+  let decodedCookie = decodeURIComponent(document.cookie);
+  let ca = decodedCookie.split(';');
+  for(let i = 0; i <ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
 }
 function typeify(data,fcmd=false){
 	var dat = {"type":"null","dt":"null","headers":{}};
@@ -198,6 +215,10 @@ function typeify(data,fcmd=false){
 			}
 			dat = {"type":"map","dt":"<map map>",'headers':{"ld":l}};
 		}
+		else if(/^[ \n\t]*([^ ]+)[ \n\t]*\|[ \n\t]*([0-9]+)[ \n\t]*$/.test(data)){
+			var dt = data.match(/^[ \n\t]*([^ ]+)[ \n\t]*\|[ \n\t]*([0-9]+)[ \n\t]*$/);
+			dat = pv[d['fname']+'('+dt[1]][dt[2]];
+		}
 		else if(/^([ \n\t]*([^]+)[ \n\t]*([+\-*\/%^])[ \n\t]*([^]+))+$/.test(data)){
 			var dt = data.matchAll(/[ \n\t]*[+\-*\/%^][ \n\t]*/g)
 			for(var i of dt){
@@ -318,6 +339,12 @@ function cvar(n,type,dt,h={},global=false,admin=false){
 	if (global){
 		gvars[n] = {'type':type,'dt':dt,'headers':h};
 	}
+	if(pv[d['fname']+'('+n] == undefined){
+		pv[d['fname']+'('+n] = [{'type':type,'dt':dt,'headers':h}];
+	}
+	else{
+		pv[d['fname']+'('+n].splice(0,0,{'type':type,'dt':dt,'headers':h});
+	}
 	return true;
 }
 function callfunct(funct,attrib={}){
@@ -388,8 +415,11 @@ function evaluate(line){
 		}
 		vars = nvar;
 		cvar("@functname","string",dt[1],{},false,true);
+		var ofn = rep(d['fname']);
+		d['fname'] = dt[1];
 		ev(item['headers']['fn']['code']);
 		vars = ov;
+		d['fname'] = ofn;
 	}
 	else if (/^[ \n\t]*var[ \n\t]*([^\n ]+)[ \n\t]*=[ \n\t]*([^]+)[ \n\t]*$/.test(line)){
 		var dt = line.match(/[ \n\t]*var[ \n\t]*([^\n ]+)[ \n\t]*=[ \n\t]*([^]+)[ \n\t]*/);
@@ -658,6 +688,12 @@ function evaluate(line){
 		else if(n == 14){
 			cvar("dat","string",dat[0]['dt']+dat[1]['dt'],basehead);
 		}
+		else if(n == 15){
+			document.cookie = `${dat[0]['dt']}=${dat[1]['dt']}; expires=${dat[2]['dt']}; path=${dat[3]['dt']};`;
+		}
+		else if(n == 16){
+			cvar("dat","string",getCookie(dat[0]['dt']),basehead);
+		}
 		cnch[n] = [];
 	}
 	else if (/^[ \n\t]*cnch[ \n\t]*([0-9]+)[ \n\t]+([^]+)[ \n\t]*$/.test(line)){
@@ -786,7 +822,7 @@ funct concat(self,string){
 	return dat;
 };
 };
-class doc(static){
+class @doc(static){
 	funct title(){
 		cnc8;
 		return dat;
@@ -818,6 +854,27 @@ class doc(static){
 		cnch12 tsel;
 		cnc12;
 	};
+};
+class @cookie(static){
+funct set(name,data,exp,path='/'){
+	cnch15 name;
+	cnch15 data;
+	cnch15 exp;
+	cnch15 path;
+	cnc15;
+};
+funct get(name){
+	cnch16 name;
+	cnc16;
+	return dat;
+};
+funct delete(name){
+	cnch15 name;
+	cnch15 "";
+	cnch15 "Thu, 01 Jan 1970 00:00:00 UTC";
+	cnch15 "/";
+	cnc15;
+};
 };`);
 d['su'] = false;
 window.onload = function(){
