@@ -16,314 +16,555 @@ imitations under the License.
 */
 var pv = {};
 var gvars = {};
-var d = {'atc':function(){},'atcd':[],'atcc':0,'atcdat':'','retd':{"type":"null",'dt':'null','headers':{'null':'null'}},'funct':false,'class':'','evurl':'https://evolution-lang.greatusername.repl.co/evolution/','lc':false,'prevt':false,'ifs':false,'su':false,'class':false,"fname":"@main"};
-var basehead = {"rd":{"item":{"type":"funct","dt":`<function @defaults.item function>`,"headers":{"fn":{"attrib":{"c":"null"},"code":"cnch6 @self;cnch6 c;cnc6;return dat;","head":{}}}},"set":{"type":"funct","dt":"<function @defaults.set function>","headers":{"fn":{"attrib":{"key":"null","value":"null"},"code":"cnch7 @self;cnch7 key;cnch7 value;cnc7;return dat;","head":{}}}},"type":{"type":"funct","dt":"<function @defaults.type function>","headers":{"fn":{"attrib":{"":"null"},"code":"cnch13 @self;cnc13;return dat;","head":{}}}},"concat":{"type":"funct","dt":"<function @defaults.concat function>","headers":{"fn":{"attrib":{"string":"null"},"code":"cnch14 @self;cnch14 string;cnc14;return dat;","head":{}}}}}};
-function rep(dt){ //Replicate JSON
-return JSON.parse(JSON.stringify(dt));
+var d = {
+	'atc': function() {},
+	'atcd': [],
+	'atcc': 0,
+	'atcdat': '',
+	'retd': {
+		"type": "null",
+		'dt': 'null',
+		'headers': {
+			'null': 'null'
+		}
+	},
+	'funct': false,
+	'class': '',
+	'evurl': 'https://cdn.jsdelivr.net/gh/mathstar13/Evolution/dist/',
+	'lc': false,
+	'prevt': false,
+	'ifs': false,
+	'su': false,
+	'class': false,
+	"fname": "@main"
+};
+var basehead = {
+	"rd": {
+		"item": {
+			"type": "funct",
+			"dt": `<function @defaults.item function>`,
+			"headers": {
+				"fn": {
+					"attrib": {
+						"c": "null"
+					},
+					"code": "cnch6 @self;cnch6 c;cnc6;return dat;",
+					"head": {}
+				}
+			}
+		},
+		"set": {
+			"type": "funct",
+			"dt": "<function @defaults.set function>",
+			"headers": {
+				"fn": {
+					"attrib": {
+						"key": "null",
+						"value": "null"
+					},
+					"code": "cnch7 @self;cnch7 key;cnch7 value;cnc7;return dat;",
+					"head": {}
+				}
+			}
+		},
+		"type": {
+			"type": "funct",
+			"dt": "<function @defaults.type function>",
+			"headers": {
+				"fn": {
+					"attrib": {
+						"": "null"
+					},
+					"code": "cnch13 @self;cnc13;return dat;",
+					"head": {}
+				}
+			}
+		},
+		"concat": {
+			"type": "funct",
+			"dt": "<function @defaults.concat function>",
+			"headers": {
+				"fn": {
+					"attrib": {
+						"string": "null"
+					},
+					"code": "cnch14 @self;cnch14 string;cnc14;return dat;",
+					"head": {}
+				}
+			}
+		}
+	}
+};
+
+function rep(dt) { //Replicate JSON
+	return JSON.parse(JSON.stringify(dt));
 }
 var cnch = {};
 var vars = rep(gvars);
+
 function escapeRegExp(string) {
-  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+	return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
+
 function replaceAll(str, find, replace) {
-  return str.replace(new RegExp(escapeRegExp(find), 'g'), replace);
+	return str.replace(new RegExp(escapeRegExp(find), 'g'), replace);
 }
+
 function htmlDecode(input) {
-  var doc = new DOMParser().parseFromString(input, "text/html");
-  return doc.documentElement.textContent;
+	var doc = new DOMParser().parseFromString(input, "text/html");
+	return doc.documentElement.textContent;
 }
+
 function getCookie(cname) {
-  let name = cname + "=";
-  let decodedCookie = decodeURIComponent(document.cookie);
-  let ca = decodedCookie.split(';');
-  for(let i = 0; i <ca.length; i++) {
-    let c = ca[i];
-    while (c.charAt(0) == ' ') {
-      c = c.substring(1);
-    }
-    if (c.indexOf(name) == 0) {
-      return c.substring(name.length, c.length);
-    }
-  }
-  return "";
+	let name = cname + "=";
+	let decodedCookie = decodeURIComponent(document.cookie);
+	let ca = decodedCookie.split(';');
+	for (let i = 0; i < ca.length; i++) {
+		let c = ca[i];
+		while (c.charAt(0) == ' ') {
+			c = c.substring(1);
+		}
+		if (c.indexOf(name) == 0) {
+			return c.substring(name.length, c.length);
+		}
+	}
+	return "";
 }
-function typeify(data,fcmd=false){
-	var dat = {"type":"null","dt":"null","headers":{}};
-	if(/^[ \n\t]*(.*)[ \n\t]*===[ \n\t]*(.*)[ \n\t]*$/.test(data)){
+
+function typeify(data, fcmd = false) {
+	var dat = {
+		"type": "null",
+		"dt": "null",
+		"headers": {}
+	};
+	if (/^[ \n\t]*(.*)[ \n\t]*===[ \n\t]*(.*)[ \n\t]*$/.test(data)) {
 		var dt = data.match(/^[ \n\t]*(.*)[ \n\t]*===[ \n\t]*(.*)[ \n\t]*$/);
-		if(typeify(dt[1])['type'] == typeify(dt[2])['type']){
-		if(typeify(dt[1])['dt'] == typeify(dt[2])['dt']){
-			dat = {"type":"boolean","dt":true,"headers":{}}
+		if (typeify(dt[1])['type'] == typeify(dt[2])['type']) {
+			if (typeify(dt[1])['dt'] == typeify(dt[2])['dt']) {
+				dat = {
+					"type": "boolean",
+					"dt": true,
+					"headers": {}
+				}
+			} else {
+				dat = {
+					'type': 'boolean',
+					'dt': false,
+					'headers': {}
+				}
+			}
+		} else {
+			dat = {
+				'type': 'boolean',
+				'dt': false,
+				'headers': {}
+			};
 		}
-		else{
-			dat = {'type':'boolean','dt':false,'headers':{}}
-		}
-		}
-		else{
-			dat = {'type':'boolean','dt':false,'headers':{}};
-		}
-	}
-	else if(/^[ \n\t]*(.*)[ \n\t]*!==[ \n\t]*(.*)[ \n\t]*$/.test(data)){
+	} else if (/^[ \n\t]*(.*)[ \n\t]*!==[ \n\t]*(.*)[ \n\t]*$/.test(data)) {
 		var dt = data.match(/^[ \n\t]*(.*)[ \n\t]*!==[ \n\t]*(.*)[ \n\t]*$/);
-		if(typeify(dt[1])['type'] == typeify(dt[2])['type']){
-		if(typeify(dt[1])['dt'] != typeify(dt[2])['dt']){
-			dat = {"type":"boolean","dt":true,"headers":{}}
+		if (typeify(dt[1])['type'] == typeify(dt[2])['type']) {
+			if (typeify(dt[1])['dt'] != typeify(dt[2])['dt']) {
+				dat = {
+					"type": "boolean",
+					"dt": true,
+					"headers": {}
+				}
+			} else {
+				dat = {
+					'type': 'boolean',
+					'dt': false,
+					'headers': {}
+				}
+			}
+		} else {
+			dat = {
+				'type': 'boolean',
+				'dt': false,
+				'headers': {}
+			};
 		}
-		else{
-			dat = {'type':'boolean','dt':false,'headers':{}}
-		}
-		}
-		else{
-			dat = {'type':'boolean','dt':false,'headers':{}};
-		}
-	}
-	else if(/^[ \n\t]*(.*)[ \n\t]*>==[ \n\t]*(.*)[ \n\t]*$/.test(data)){
+	} else if (/^[ \n\t]*(.*)[ \n\t]*>==[ \n\t]*(.*)[ \n\t]*$/.test(data)) {
 		var dt = data.match(/^[ \n\t]*(.*)[ \n\t]*>==[ \n\t]*(.*)[ \n\t]*$/);
-		if(typeify(dt[1])['type'] == typeify(dt[2])['type']){
-		if(typeify(dt[1])['dt'] >= typeify(dt[2])['dt']){
-			dat = {"type":"boolean","dt":true,"headers":{}}
+		if (typeify(dt[1])['type'] == typeify(dt[2])['type']) {
+			if (typeify(dt[1])['dt'] >= typeify(dt[2])['dt']) {
+				dat = {
+					"type": "boolean",
+					"dt": true,
+					"headers": {}
+				}
+			} else {
+				dat = {
+					'type': 'boolean',
+					'dt': false,
+					'headers': {}
+				}
+			}
+		} else {
+			dat = {
+				'type': 'boolean',
+				'dt': false,
+				'headers': {}
+			}
 		}
-		else{
-			dat = {'type':'boolean','dt':false,'headers':{}}
-		}
-		}
-		else{
-			dat = {'type':'boolean','dt':false,'headers':{}}
-		}
-	}
-	else if(/^[ \n\t]*(.*)[ \n\t]*<==[ \n\t]*(.*)[ \n\t]*$/.test(data)){
+	} else if (/^[ \n\t]*(.*)[ \n\t]*<==[ \n\t]*(.*)[ \n\t]*$/.test(data)) {
 		var dt = data.match(/^[ \n\t]*(.*)[ \n\t]*<==[ \n\t]*(.*)[ \n\t]*$/);
-		if(typeify(dt[1])['type'] == typeify(dt[2])['type']){
-		if(typeify(dt[1])['dt'] <= typeify(dt[2])['dt']){
-			dat = {"type":"boolean","dt":true,"headers":{}}
+		if (typeify(dt[1])['type'] == typeify(dt[2])['type']) {
+			if (typeify(dt[1])['dt'] <= typeify(dt[2])['dt']) {
+				dat = {
+					"type": "boolean",
+					"dt": true,
+					"headers": {}
+				}
+			} else {
+				dat = {
+					'type': 'boolean',
+					'dt': false,
+					'headers': {}
+				}
+			}
+		} else {
+			dat = {
+				'type': 'boolean',
+				'dt': false,
+				'headers': {}
+			}
 		}
-		else{
-			dat = {'type':'boolean','dt':false,'headers':{}}
-		}
-		}
-		else{
-			dat = {'type':'boolean','dt':false,'headers':{}}
-		}
-	}
-	else if(/^[ \n\t]*(.*)[ \n\t]*>=[ \n\t]*(.*)[ \n\t]*$/.test(data)){
+	} else if (/^[ \n\t]*(.*)[ \n\t]*>=[ \n\t]*(.*)[ \n\t]*$/.test(data)) {
 		var dt = data.match(/^[ \n\t]*(.*)[ \n\t]*>=[ \n\t]*(.*)[ \n\t]*$/);
-		if(typeify(dt[1])['dt'] >= typeify(dt[2])['dt']){
-			dat = {"type":"boolean","dt":true,"headers":{}}
+		if (typeify(dt[1])['dt'] >= typeify(dt[2])['dt']) {
+			dat = {
+				"type": "boolean",
+				"dt": true,
+				"headers": {}
+			}
+		} else {
+			dat = {
+				'type': 'boolean',
+				'dt': false,
+				'headers': {}
+			}
 		}
-		else{
-			dat = {'type':'boolean','dt':false,'headers':{}}
-		}
-	}
-	else if(/^[ \n\t]*(.*)[ \n\t]*<=[ \n\t]*(.*)[ \n\t]*$/.test(data)){
+	} else if (/^[ \n\t]*(.*)[ \n\t]*<=[ \n\t]*(.*)[ \n\t]*$/.test(data)) {
 		var dt = data.match(/^[ \n\t]*(.*)[ \n\t]*<=[ \n\t]*(.*)[ \n\t]*$/);
-		if(typeify(dt[1])['dt'] <= typeify(dt[2])['dt']){
-			dat = {"type":"boolean","dt":true,"headers":{}}
+		if (typeify(dt[1])['dt'] <= typeify(dt[2])['dt']) {
+			dat = {
+				"type": "boolean",
+				"dt": true,
+				"headers": {}
+			}
+		} else {
+			dat = {
+				'type': 'boolean',
+				'dt': false,
+				'headers': {}
+			}
 		}
-		else{
-			dat = {'type':'boolean','dt':false,'headers':{}}
-		}
-	}
-	else if(/^[ \n\t]*(.*)[ \n\t]*>[ \n\t]*(.*)[ \n\t]*$/.test(data)){
+	} else if (/^[ \n\t]*(.*)[ \n\t]*>[ \n\t]*(.*)[ \n\t]*$/.test(data)) {
 		var dt = data.match(/^[ \n\t]*(.*)[ \n\t]*>[ \n\t]*(.*)[ \n\t]*$/);
-		if(typeify(dt[1])['dt'] > typeify(dt[2])['dt']){
-			dat = {"type":"boolean","dt":true,"headers":{}}
+		if (typeify(dt[1])['dt'] > typeify(dt[2])['dt']) {
+			dat = {
+				"type": "boolean",
+				"dt": true,
+				"headers": {}
+			}
+		} else {
+			dat = {
+				'type': 'boolean',
+				'dt': false,
+				'headers': {}
+			}
 		}
-		else{
-			dat = {'type':'boolean','dt':false,'headers':{}}
-		}
-	}
-	else if(/^[ \n\t]*(.*)[ \n\t]*<[ \n\t]*(.*)[ \n\t]*$/.test(data)){
+	} else if (/^[ \n\t]*(.*)[ \n\t]*<[ \n\t]*(.*)[ \n\t]*$/.test(data)) {
 		var dt = data.match(/^[ \n\t]*(.*)[ \n\t]*<[ \n\t]*(.*)[ \n\t]*$/);
-		if(typeify(dt[1])['dt'] < typeify(dt[2])['dt']){
-			dat = {"type":"boolean","dt":true,"headers":{}}
+		if (typeify(dt[1])['dt'] < typeify(dt[2])['dt']) {
+			dat = {
+				"type": "boolean",
+				"dt": true,
+				"headers": {}
+			}
+		} else {
+			dat = {
+				'type': 'boolean',
+				'dt': false,
+				'headers': {}
+			}
 		}
-		else{
-			dat = {'type':'boolean','dt':false,'headers':{}}
-		}
-	}
-	else if(/^[ \n\t]*(.*)[ \n\t]*==[ \n\t]*(.*)[ \n\t]*$/.test(data)){
+	} else if (/^[ \n\t]*(.*)[ \n\t]*==[ \n\t]*(.*)[ \n\t]*$/.test(data)) {
 		var dt = data.match(/^[ \n\t]*(.*)[ \n\t]*==[ \n\t]*(.*)[ \n\t]*$/);
-		if(typeify(dt[1])['dt'] == typeify(dt[2])['dt']){
-			dat = {"type":"boolean","dt":true,"headers":{}}
+		if (typeify(dt[1])['dt'] == typeify(dt[2])['dt']) {
+			dat = {
+				"type": "boolean",
+				"dt": true,
+				"headers": {}
+			}
+		} else {
+			dat = {
+				'type': 'boolean',
+				'dt': false,
+				'headers': {}
+			}
 		}
-		else{
-			dat = {'type':'boolean','dt':false,'headers':{}}
-		}
-	}
-	else if(/^[ \n\t]*(.*)[ \n\t]*!=[ \n\t]*(.*)[ \n\t]*$/.test(data)){
+	} else if (/^[ \n\t]*(.*)[ \n\t]*!=[ \n\t]*(.*)[ \n\t]*$/.test(data)) {
 		var dt = data.match(/^[ \n\t]*(.*)[ \n\t]*!=[ \n\t]*(.*)[ \n\t]*$/);
-		if(typeify(dt[1])['dt'] != typeify(dt[2])['dt']){
-			dat = {"type":"boolean","dt":true,"headers":{}}
+		if (typeify(dt[1])['dt'] != typeify(dt[2])['dt']) {
+			dat = {
+				"type": "boolean",
+				"dt": true,
+				"headers": {}
+			}
+		} else {
+			dat = {
+				'type': 'boolean',
+				'dt': false,
+				'headers': {}
+			}
 		}
-		else{
-			dat = {'type':'boolean','dt':false,'headers':{}}
-		}
-	}
-	else if(/^[ \n\t]*'([^']*)'[ \n\t]*$/.test(data)){
+	} else if (/^[ \n\t]*'([^']*)'[ \n\t]*$/.test(data)) {
 		var dt = data.match(/[ \n\t]*'([^]*)'[ \n\t]*/);
-		dat = {'type':'string','dt':dt[1],'headers':{}}
-	}
-	else if(/^[ \n\t]*"([^"]*)"[ \n\t]*$/.test(data)){
+		dat = {
+			'type': 'string',
+			'dt': dt[1],
+			'headers': {}
+		}
+	} else if (/^[ \n\t]*"([^"]*)"[ \n\t]*$/.test(data)) {
 		var dt = data.match(/[ \n\t]*"([^]*)"[ \n\t]*/);
-		dat = {'type':'string','dt':dt[1],'headers':{}}
-	}
-	else if(/^[ \n\t]*`([^`]*)`[ \n\t]*$/.test(data)){
+		dat = {
+			'type': 'string',
+			'dt': dt[1],
+			'headers': {}
+		}
+	} else if (/^[ \n\t]*`([^`]*)`[ \n\t]*$/.test(data)) {
 		var data = data.match(/[ \n\t]*`([^`]*)`[ \n\t]*/)[1];
 		var dat = data.match(/\$\{([^}]*)\}/g);
-		if(dat != null){
-		for (item of [...Array(dat.length).keys()]){
-			var oretd = rep(d['retd']);
-			ev(dat[item].match(/\$\{([^}]*)\}/)[1]);
-			data = data.replace(dat[item],d['retd']['dt'],1);
-			d['retd'] = rep(oretd);
+		if (dat != null) {
+			for (item of [...Array(dat.length).keys()]) {
+				var oretd = rep(d['retd']);
+				ev(dat[item].match(/\$\{([^}]*)\}/)[1]);
+				data = data.replace(dat[item], d['retd']['dt'], 1);
+				d['retd'] = rep(oretd);
+			}
 		}
+		dat = {
+			'type': 'string',
+			'dt': data,
+			'headers': {}
 		}
-		dat = {'type':'string','dt':data,'headers':{}}
-	}
-	else if(/^[ \n\t]*(true|false)[ \n\t]*$/.test(data)){
+	} else if (/^[ \n\t]*(true|false)[ \n\t]*$/.test(data)) {
 		var dt = data.match(/^[ \n\t]*(true|false)[ \n\t]*$/)[1];
-		if (dt == 'true'){
-			dat = {"type":"boolean","dt":true,"headers":{}}
+		if (dt == 'true') {
+			dat = {
+				"type": "boolean",
+				"dt": true,
+				"headers": {}
+			}
+		} else {
+			dat = {
+				'type': 'boolean',
+				'dt': false,
+				'headers': {}
+			}
 		}
-		else{
-			dat = {'type':'boolean','dt':false,'headers':{}}
-		}
-	}
-	else if(/^[ \n\t]*([0-9]+)[ \n\t]*$/.test(data)){
+	} else if (/^[ \n\t]*([0-9]+)[ \n\t]*$/.test(data)) {
 		var dt = data.match(/^[ \n\t]*([0-9]+)[ \n\t]*$/);
 		var v = parseInt(dt);
-		dat = {"type":"int","dt":v,"headers":{}}
-	}
-	else if(/^[ \n\t]*\[([^]*)\][ \n\t]*$/.test(data)){
-			var dt = data.match(/^[ \n\t]*\[([^]*)\][ \n\t]*$/);
-			var l = [];
-			for (item of ap(dt[1]).split(",")){
-				item = replaceAll(item,"\\c",",")
-				l.push(typeify(item));
+		dat = {
+			"type": "int",
+			"dt": v,
+			"headers": {}
+		}
+	} else if (/^[ \n\t]*\[([^]*)\][ \n\t]*$/.test(data)) {
+		var dt = data.match(/^[ \n\t]*\[([^]*)\][ \n\t]*$/);
+		var l = [];
+		for (item of ap(dt[1]).split(",")) {
+			item = replaceAll(item, "\\c", ",")
+			l.push(typeify(item));
+		}
+		dat = {
+			"type": "list",
+			"dt": "<list list>",
+			'headers': {
+				"ld": l
 			}
-			dat = {"type":"list","dt":"<list list>",'headers':{"ld":l}};
-	}
-	else if(/^[ \n\t]*\{([^]*)\}[ \n\t]*$/.test(data)){
-			var dt = data.match(/^[ \n\t]*\{([^]*)\}[ \n\t]*$/);
-			var l = {};
-			for (item of ap(dt[1]).split(",")){
-				item = replaceAll(item,"\\c",",")
-				var itv = item.split(":");
-				l[typeify(itv[0])['dt']] = typeify(itv[1]);
+		};
+	} else if (/^[ \n\t]*\{([^]*)\}[ \n\t]*$/.test(data)) {
+		var dt = data.match(/^[ \n\t]*\{([^]*)\}[ \n\t]*$/);
+		var l = {};
+		for (item of ap(dt[1]).split(",")) {
+			item = replaceAll(item, "\\c", ",")
+			var itv = item.split(":");
+			l[typeify(itv[0])['dt']] = typeify(itv[1]);
+		}
+		dat = {
+			"type": "map",
+			"dt": "<map map>",
+			'headers': {
+				"ld": l
 			}
-			dat = {"type":"map","dt":"<map map>",'headers':{"ld":l}};
-	}
-	else if(/^[ \n\t]*([^ ]+)[ \n\t]*\|[ \n\t]*([0-9]+)[ \n\t]*$/.test(data)){
-			var dt = data.match(/^[ \n\t]*([^ ]+)[ \n\t]*\|[ \n\t]*([0-9]+)[ \n\t]*$/);
-			dat = pv[d['fname']+'('+dt[1]][dt[2]];
-	}
-	else{
+		};
+	} else if (/^[ \n\t]*([^ ]+)[ \n\t]*\|[ \n\t]*([0-9]+)[ \n\t]*$/.test(data)) {
+		var dt = data.match(/^[ \n\t]*([^ ]+)[ \n\t]*\|[ \n\t]*([0-9]+)[ \n\t]*$/);
+		dat = pv[d['fname'] + '(' + dt[1]][dt[2]];
+	} else {
 		od = data;
-		data = ap(data,"+");
-		data = ap(data,"-");
-		data = ap(data,"*");
-		data = ap(data,"/");
-		data = ap(data,"^");
-		if(/^([ \n\t]*([^]+)[ \n\t]*([+\-*\/%^])[ \n\t]*([^]+))+$/.test(data)){
+		data = ap(data, "+");
+		data = ap(data, "-");
+		data = ap(data, "*");
+		data = ap(data, "/");
+		data = ap(data, "^");
+		if (/^([ \n\t]*([^]+)[ \n\t]*([+\-*\/%^])[ \n\t]*([^]+))+$/.test(data)) {
 			var dt = data.matchAll(/[ \n\t]*[+\-*\/%^][ \n\t]*/g)
-			for(var i of dt){
+			for (var i of dt) {
 				var dat = data.split(i[0]);
 				var d0 = dat[0].split(/[+\-*\/%^]/)[0];
-				if(d0 == null){
+				if (d0 == null) {
 					d0 = dat[0];
 				}
 				var d0v = typeify(d0)['dt'];
 				var d1 = dat[1].split(/[+\-*\/%^]/)[0];
-				if(d1 == null){
+				if (d1 == null) {
 					d1 = dat[1];
 				}
 				var d1v = typeify(d1)['dt'];
-				if(i == '+'){
-					data = data.replace(d0+i[0]+d1,d0v+d1v);
-				}
-				else if(i == '-'){
-					data = data.replace(d0+i[0]+d1,d0v-d1v);
-				}
-				else if(i == '*'){
-					data = data.replace(d0+i[0]+d1,d0v*d1v);
-				}
-				else if(i == '/'){
-					data = data.replace(d0+i[0]+d1,d0v/d1v);
-				}
-				else if(i == '%'){
-					data = data.replace(d0+i[0]+d1,d0v%d1v);
-				}
-				else if(i == '^'){
-					data = data.replace(d0+i[0]+d1,Math.pow(d0v,d1v));
+				if (i == '+') {
+					data = data.replace(d0 + i[0] + d1, d0v + d1v);
+				} else if (i == '-') {
+					data = data.replace(d0 + i[0] + d1, d0v - d1v);
+				} else if (i == '*') {
+					data = data.replace(d0 + i[0] + d1, d0v * d1v);
+				} else if (i == '/') {
+					data = data.replace(d0 + i[0] + d1, d0v / d1v);
+				} else if (i == '%') {
+					data = data.replace(d0 + i[0] + d1, d0v % d1v);
+				} else if (i == '^') {
+					data = data.replace(d0 + i[0] + d1, Math.pow(d0v, d1v));
 				}
 			}
-			dat = {'type':'int','dt':parseInt(data),"headers":{}}
-	}
-	else{
-		data = od;
-		/*if(data.replace(/[ \n\t]/,'') in vars){
-			return vars[data.replace(/[ \n\t]/,'')];
+			dat = {
+				'type': 'int',
+				'dt': parseInt(data),
+				"headers": {}
+			}
+		} else {
+			data = od;
+			/*if(data.replace(/[ \n\t]/,'') in vars){
+				return vars[data.replace(/[ \n\t]/,'')];
+			}
+			else if(data.replace(/[ \n\t]/,'') in gvars){
+				return gvars[data.replace(/[ \n\t]/,'')];
+			}
+			else{
+			error('VarError',`Unknown var: ${data}.`)
+			}*/
+			if (fcmd) {
+				if (d['lc']) {
+					return 'lc'
+				} else {
+					error('CommandError', `Unknown command: ${line}.`);
+				}
+			} else {
+				var oretd = rep(d['retd']);
+				ev(data);
+				dat = rep(d['retd']);
+				d['retd'] = oretd;
+			}
 		}
-		else if(data.replace(/[ \n\t]/,'') in gvars){
-			return gvars[data.replace(/[ \n\t]/,'')];
-		}
-		else{
-		error('VarError',`Unknown var: ${data}.`)
-		}*/
-		if(fcmd){
-			if (d['lc']){
-		return 'lc'
 	}
-	else{
-	error('CommandError',`Unknown command: ${line}.`);
-	}
-		}
-		else{
-		var oretd = rep(d['retd']);
-		ev(data);
-		dat = rep(d['retd']);
-		d['retd'] = oretd;
-		}
-	}
-	}
-	if (dat["headers"]["rd"] == undefined){
+	if (dat["headers"]["rd"] == undefined) {
 		dat["headers"]["rd"] = {};
 	}
-	var defaults = {"item":{"type":"funct","dt":`<function @defaults.item function>`,"headers":{"fn":{"attrib":{"c":"null"},"code":"cnch6 @self;cnch6 c;cnc6;return dat;","head":{}}}},"set":{"type":"funct","dt":"<function @defaults.set function>","headers":{"fn":{"attrib":{"key":"null","value":"null"},"code":"cnch7 @self;cnch7 key;cnch7 value;cnc7;return dat;","head":{}}}},"type":{"type":"funct","dt":"<function @defaults.type function>","headers":{"fn":{"attrib":{"":"null"},"code":"cnch13 @self;cnc13;return dat;","head":{}}}},"concat":{"type":"funct","dt":"<function @defaults.concat function>","headers":{"fn":{"attrib":{"string":"null"},"code":"cnch14 @self;cnch14 string;cnc14;return dat;","head":{}}}}}
-	for (var item in defaults){
-		if (dat["headers"]["rd"][item] == undefined){
+	var defaults = {
+		"item": {
+			"type": "funct",
+			"dt": `<function @defaults.item function>`,
+			"headers": {
+				"fn": {
+					"attrib": {
+						"c": "null"
+					},
+					"code": "cnch6 @self;cnch6 c;cnc6;return dat;",
+					"head": {}
+				}
+			}
+		},
+		"set": {
+			"type": "funct",
+			"dt": "<function @defaults.set function>",
+			"headers": {
+				"fn": {
+					"attrib": {
+						"key": "null",
+						"value": "null"
+					},
+					"code": "cnch7 @self;cnch7 key;cnch7 value;cnc7;return dat;",
+					"head": {}
+				}
+			}
+		},
+		"type": {
+			"type": "funct",
+			"dt": "<function @defaults.type function>",
+			"headers": {
+				"fn": {
+					"attrib": {
+						"": "null"
+					},
+					"code": "cnch13 @self;cnc13;return dat;",
+					"head": {}
+				}
+			}
+		},
+		"concat": {
+			"type": "funct",
+			"dt": "<function @defaults.concat function>",
+			"headers": {
+				"fn": {
+					"attrib": {
+						"string": "null"
+					},
+					"code": "cnch14 @self;cnch14 string;cnc14;return dat;",
+					"head": {}
+				}
+			}
+		}
+	}
+	for (var item in defaults) {
+		if (dat["headers"]["rd"][item] == undefined) {
 			dat["headers"]["rd"][item] = defaults[item];
 		}
 	}
 	return dat;
 }
-function ap(text,cchar=','){
+
+function ap(text, cchar = ',') {
 	var latc = [false]
 	var atct = []
 	var txt = []
-	for (var item of text){
+	for (var item of text) {
 		txt.push(item)
 	}
 	text = ''
 	var cnt = 0
-	var lc = {'(':')','[':']','"':'"',"'":"'",'`':'`'}
-	for (var char of txt){
-		if (latc[0]){
-			if (lc[atct[0]] == char){
+	var lc = {
+		'(': ')',
+		'[': ']',
+		'"': '"',
+		"'": "'",
+		'`': '`'
+	}
+	for (var char of txt) {
+		if (latc[0]) {
+			if (lc[atct[0]] == char) {
 				delete latc[0]
 			}
-			if (char == cchar){
+			if (char == cchar) {
 				text += '\\c'
-			}
-			else{
+			} else {
 				text += char
 			}
-	}
-		else{
-			if (char in lc){
-				latc.splice(0,0,true)
-				atct.splice(0,0,char)
+		} else {
+			if (char in lc) {
+				latc.splice(0, 0, true)
+				atct.splice(0, 0, char)
 			}
 			text += char
 		}
@@ -331,36 +572,54 @@ function ap(text,cchar=','){
 	}
 	return text
 }
-function error(n,d){
+
+function error(n, d) {
 	throw `${n}: ${d}`;
 }
-function cvar(n,type,dt,h={},global=false,admin=false){
-	if(!n.match(/^[A-Za-z$_]+[A-Za-z$_0-9]*$/) & !d['su'] & !admin){
-		error("VarError",`Cannot create variable with name ${n}.`)
+
+function cvar(n, type, dt, h = {}, global = false, admin = false) {
+	if (!n.match(/^[A-Za-z$_]+[A-Za-z$_0-9]*$/) & !d['su'] & !admin) {
+		error("VarError", `Cannot create variable with name ${n}.`)
 	}
-	for (var item in basehead['rd']){
-		if (h[item] == undefined){
+	for (var item in basehead['rd']) {
+		if (h[item] == undefined) {
 			h[item] = basehead['rd'][item];
 		}
 	}
-	vars[n] = {'type':type,'dt':dt,'headers':h};
-	if (global){
-		gvars[n] = {'type':type,'dt':dt,'headers':h};
+	vars[n] = {
+		'type': type,
+		'dt': dt,
+		'headers': h
+	};
+	if (global) {
+		gvars[n] = {
+			'type': type,
+			'dt': dt,
+			'headers': h
+		};
 	}
-	if(pv[d['fname']+'('+n] == undefined){
-		pv[d['fname']+'('+n] = [{'type':type,'dt':dt,'headers':h}];
-	}
-	else{
-		pv[d['fname']+'('+n].splice(0,0,{'type':type,'dt':dt,'headers':h});
+	if (pv[d['fname'] + '(' + n] == undefined) {
+		pv[d['fname'] + '(' + n] = [{
+			'type': type,
+			'dt': dt,
+			'headers': h
+		}];
+	} else {
+		pv[d['fname'] + '(' + n].splice(0, 0, {
+			'type': type,
+			'dt': dt,
+			'headers': h
+		});
 	}
 	return true;
 }
-function callfunct(funct,attrib={}){
+
+function callfunct(funct, attrib = {}) {
 	var fnatt = funct['headers']['fn']['attrib']
 	var nvar = gvar;
 	var cnt = 0;
 	var attl = [];
-	for (item in fnatt){
+	for (item in fnatt) {
 		attl.push(item);
 	}
 	/*
@@ -373,127 +632,121 @@ function callfunct(funct,attrib={}){
 		}
 	}*/
 }
-function evaluate(line){
-	if(/^([ \n\t]*)$/.test(line)){
-		
-	}
-	else if(/^[ \n\t]*funct[ \n\t]+([^\n ]+)[ \n\t]*\(([^]*)\)[ \n\t]*\{$/.test(line)){
-		d['atc'] = function(dt,data,tr){
-			cvar(data[0],"funct",`<function ${data[0]} function>`,{'fn':{'attrib':data[1],'code':dt,'head':{}}},!d['class'])
+
+function evaluate(line) {
+	if (/^([ \n\t]*)$/.test(line)) {
+
+	} else if (/^[ \n\t]*funct[ \n\t]+([^\n ]+)[ \n\t]*\(([^]*)\)[ \n\t]*\{$/.test(line)) {
+		d['atc'] = function(dt, data, tr) {
+			cvar(data[0], "funct", `<function ${data[0]} function>`, {
+				'fn': {
+					'attrib': data[1],
+					'code': dt,
+					'head': {}
+				}
+			}, !d['class'])
 		}
 		var dt = line.match(/[ \n\t]*funct[ \n\t]+([^\n ]+)[ \n\t]*\(([^]*)\)[ \n\t]*\{$/);
 		var att = {};
-		for(item of dt[2].split(/[ \n\t]*,[ \n\t]*/)){
-			if (item.split(/[ \n\t]*=[ \n\t]*/).length != 1){
+		for (item of dt[2].split(/[ \n\t]*,[ \n\t]*/)) {
+			if (item.split(/[ \n\t]*=[ \n\t]*/).length != 1) {
 				att[item.split(/[ \n\t]*=[ \n\t]*/)[0]] = item.split(/[ \n\t]*=[ \n\t]*/)[1]
-			}
-			else{
+			} else {
 				att[item] = 'null'
 			}
 		}
-		d['atcd'] = [dt[1],att]
+		d['atcd'] = [dt[1], att]
 		d['atcc'] += 1;
-	}
-	else if(/^[ \n\t]*([^( ]+)[ \n\t]*\(([^]*)\)[ \n\t]*$/.test(line)){
+	} else if (/^[ \n\t]*([^( ]+)[ \n\t]*\(([^]*)\)[ \n\t]*$/.test(line)) {
 		var dt = line.match(/^[ \n\t]*([^( ]+)[ \n\t]*\(([^]*)\)[ \n\t]*$/);
 		var nvar = rep(gvars);
 		var attl = [];
-		for (item of replaceAll(ap(dt[2].replace("\\,","\\comma")),"\\c","\\comma").split(/[ \n\t]*,[ \n\t]*/)){
-		item = item.replace('\\comma',',')
-		if (item != ''){
-			item = typeify(item);
-			attl.push(item)
-		}
+		for (item of replaceAll(ap(dt[2].replace("\\,", "\\comma")), "\\c", "\\comma").split(/[ \n\t]*,[ \n\t]*/)) {
+			item = item.replace('\\comma', ',')
+			if (item != '') {
+				item = typeify(item);
+				attl.push(item)
+			}
 		}
 		var cnt = 0;
 		var item = rep(typeify(dt[1]));
-		for(i in item['headers']['fn']['attrib']){
+		for (i in item['headers']['fn']['attrib']) {
 			var n = item['headers']['fn']['attrib'][i];
-			if(attl[cnt] == undefined){
+			if (attl[cnt] == undefined) {
 				break
-			}
-			else{
-		nvar[i] = attl[cnt];
-		cnt += 1
+			} else {
+				nvar[i] = attl[cnt];
+				cnt += 1
 			}
 		}
 		var ov = vars;
-		if(dt[1].split(".").length > 1){
-		nvar["@self"] = rep(typeify(dt[1].split(".")[dt[1].split(".").length - 2]));
+		if (dt[1].split(".").length > 1) {
+			nvar["@self"] = rep(typeify(dt[1].split(".")[dt[1].split(".").length - 2]));
 		}
 		vars = nvar;
-		cvar("@functname","string",dt[1],{},false,true);
+		cvar("@functname", "string", dt[1], {}, false, true);
 		var ofn = rep(d['fname']);
 		d['fname'] = dt[1];
 		ev(item['headers']['fn']['code']);
 		vars = ov;
 		d['fname'] = ofn;
-	}
-	else if (/^[ \n\t]*var[ \n\t]*([^\n ]+)[ \n\t]*=[ \n\t]*([^]+)[ \n\t]*$/.test(line)){
+	} else if (/^[ \n\t]*var[ \n\t]*([^\n ]+)[ \n\t]*=[ \n\t]*([^]+)[ \n\t]*$/.test(line)) {
 		var dt = line.match(/[ \n\t]*var[ \n\t]*([^\n ]+)[ \n\t]*=[ \n\t]*([^]+)[ \n\t]*/);
 		var t = rep(typeify(dt[2]));
-		cvar(rep(dt[1]),t["type"],t["dt"],t["headers"]);
-	}
-	else if (/^[ \n\t]*return[ \n\t]+([^\n ]*)[ \n\t]*$/.test(line)){
+		cvar(rep(dt[1]), t["type"], t["dt"], t["headers"]);
+	} else if (/^[ \n\t]*return[ \n\t]+([^\n ]*)[ \n\t]*$/.test(line)) {
 		var dt = line.match(/^[ \n\t]*return[ \n\t]+([^\n ]*)[ \n\t]*$/);
 		d['retd'] = typeify(dt[1]);
-	}
-	else if (/^[ \n\t]*(else){0,1}[ \n\t]*if[ \n\t]*\((.*)\)[ \n\t]*\{[ \n\t]*$/.test(line)){
+	} else if (/^[ \n\t]*(else){0,1}[ \n\t]*if[ \n\t]*\((.*)\)[ \n\t]*\{[ \n\t]*$/.test(line)) {
 		var dt = line.match(/^[ \n\t]*(else){0,1}[ \n\t]*if[ \n\t]*\((.*)\)[ \n\t]*\{[ \n\t]*$/);
-		d['atc'] = function(dt,data,tr){
+		d['atc'] = function(dt, data, tr) {
 			d['ifs'] = true;
-			if(data[0]){
+			if (data[0]) {
 				ev(dt);
 				d['prevt'] = true;
 			}
 			d['ifs'] = true;
 		}
-		if(dt[1] == "else"){
-			if(!d['ifs']){
-				error("SyntaxError","Elseif without if statement before.")
+		if (dt[1] == "else") {
+			if (!d['ifs']) {
+				error("SyntaxError", "Elseif without if statement before.")
 			}
-			if(d['prevt']){
+			if (d['prevt']) {
 				var b = false;
-			}
-			else{
+			} else {
 				var b = typeify(dt[2])['dt'];
 			}
-		}
-		else{
-		var b = typeify(dt[2])['dt'];
+		} else {
+			var b = typeify(dt[2])['dt'];
 		}
 		d['atcd'] = [b];
 		d['atcc'] = 1;
-	}
-		else if(/^[ \n\t]*else[ \n\t]*\{[ \n\t]*/.test(line)){
-			var dt = line.match(/^[ \n\t]*else[ \n\t]*\{[ \n\t]*/);
-			if(!d['ifs']){
-				error("SyntaxError","Else without if statement before.")
-			}
-			if(!d['prevt']){
-				d['atc'] = function(dt,data,tr){
-					d['ifs'] = false;
+	} else if (/^[ \n\t]*else[ \n\t]*\{[ \n\t]*/.test(line)) {
+		var dt = line.match(/^[ \n\t]*else[ \n\t]*\{[ \n\t]*/);
+		if (!d['ifs']) {
+			error("SyntaxError", "Else without if statement before.")
+		}
+		if (!d['prevt']) {
+			d['atc'] = function(dt, data, tr) {
+				d['ifs'] = false;
 				ev(dt);
 				d['prevt'] = false;
-				}
-				d['atcd'] = [];
-				d['atcc'] = 1;
-			
 			}
-			else{
-				d['atc'] = function(dt,data,tr){
-				}
-				d['atcd'] = [];
-				d['atcc'] = 1;
-			}
+			d['atcd'] = [];
+			d['atcc'] = 1;
+
+		} else {
+			d['atc'] = function(dt, data, tr) {}
+			d['atcd'] = [];
+			d['atcc'] = 1;
 		}
-	else if (/^[ \n\t]*class[ \n\t]+([^\n ]+)[ \n\t]*\([^\n ]+\)[ \n\t]*\{$/.test(line)){
+	} else if (/^[ \n\t]*class[ \n\t]+([^\n ]+)[ \n\t]*\([^\n ]+\)[ \n\t]*\{$/.test(line)) {
 		var dt = line.match(/^[ \n\t]*class[ \n\t]+([^\n ]+)[ \n\t]*\([^\n ]+\)[ \n\t]*\{$/);
-		d['atc'] = function(dt,data,tr){
+		d['atc'] = function(dt, data, tr) {
 			ov = rep(vars);
-			for (v in vars){
-				if(vars[v]['headers'] == undefined){
-					error("","")
+			for (v in vars) {
+				if (vars[v]['headers'] == undefined) {
+					error("", "")
 				}
 				vars[v]['headers']["ZH"] = 1;
 			}
@@ -501,8 +754,8 @@ function evaluate(line){
 			ev(dt);
 			d['class'] = false;
 			vd = {};
-			for (v in vars){
-				if(vars[v]['headers']["ZH"] != 1){
+			for (v in vars) {
+				if (vars[v]['headers']["ZH"] != 1) {
 					vars[v]['headers']["ZH"] = 0;
 					vd[v] = vars[v];
 				}
@@ -528,20 +781,20 @@ function evaluate(line){
 				}*/
 			}
 			vars = ov;
-			cvar(data[0][1],"class",`<class ${data[0][1]} class>`,{"rd":rep(vd)},true);
+			cvar(data[0][1], "class", `<class ${data[0][1]} class>`, {
+				"rd": rep(vd)
+			}, true);
 		}
 		d['atcd'] = [dt]
 		d['atcc'] += 1;
-	}
-	else if(/^[ \n\t]*while[ \n\t]*\(([^]*)\)[ \n\t]*\{[ \n\t]*$/.test(line)){
+	} else if (/^[ \n\t]*while[ \n\t]*\(([^]*)\)[ \n\t]*\{[ \n\t]*$/.test(line)) {
 		var dt = line.match(/^[ \n\t]*while[ \n\t]*\(([^]*)\)[ \n\t]*\{[ \n\t]*$/);
-		d['atc'] = function(dt,data,tr){
+		d['atc'] = function(dt, data, tr) {
 			var c = 1;
-			while(c < 100000){
-				if(typeify(data[0])['dt']){
-				ev(dt);
-				}
-				else{
+			while (c < 100000) {
+				if (typeify(data[0])['dt']) {
+					ev(dt);
+				} else {
 					break;
 				}
 				c++;
@@ -549,10 +802,9 @@ function evaluate(line){
 		}
 		d['atcd'] = [dt[1]]
 		d['atcc'] += 1;
-	}
-		else if(/^[ \n\t]*for[ \n\t]*\(([^]*)\)[ \n\t]*\{[ \n\t]*$/.test(line)){
+	} else if (/^[ \n\t]*for[ \n\t]*\(([^]*)\)[ \n\t]*\{[ \n\t]*$/.test(line)) {
 		var dt = line.match(/^[ \n\t]*for[ \n\t]*\(([^]*)\)[ \n\t]*\{[ \n\t]*$/);
-		d['atc'] = function(dt,data,tr){
+		d['atc'] = function(dt, data, tr) {
 			var c = 1;
 			/*while(c < 100000){
 				if(typeify(data[0])['dt']){
@@ -563,260 +815,218 @@ function evaluate(line){
 				}
 				c++;
 			}*/
-			if(data[1]['type'] == 'list'){
-				for(var i of data[1]['headers']['ld']){
-					cvar(data[0],i['type'],i['dt'],i['headers']);
+			if (data[1]['type'] == 'list') {
+				for (var i of data[1]['headers']['ld']) {
+					cvar(data[0], i['type'], i['dt'], i['headers']);
 					ev(dt);
 				}
-			}
-			else if(data[1]['type'] == 'map'){
-				for(var i in data[1]['headers']['ld']){
-					cvar(data[0],"string",i,basehead);
+			} else if (data[1]['type'] == 'map') {
+				for (var i in data[1]['headers']['ld']) {
+					cvar(data[0], "string", i, basehead);
 					ev(dt);
 				}
-			}
-			else{
-				error("TypeError",`Cannot loop over non-iterable type "${data[1]["type"]}".`)
+			} else {
+				error("TypeError", `Cannot loop over non-iterable type "${data[1]["type"]}".`)
 			}
 		}
-		var l = [dt[1].match(/[ \n\t]*([^ ]+)[ \n\t]*\:[ \n\t]*([^ ]+)[ \n\t]*/)[1],typeify(dt[1].match(/[ \n\t]*([^ ]+)[ \n\t]*\:[ \n\t]*([^ ]+)[ \n\t]*/)[2])];
+		var l = [dt[1].match(/[ \n\t]*([^ ]+)[ \n\t]*\:[ \n\t]*([^ ]+)[ \n\t]*/)[1], typeify(dt[1].match(/[ \n\t]*([^ ]+)[ \n\t]*\:[ \n\t]*([^ ]+)[ \n\t]*/)[2])];
 		d['atcd'] = l;
 		d['atcc'] += 1;
-	}
-	else if (/^[ \n\t]*cnc[ \n\t]*([0-9]+)[ \n\t]*$/.test(line)){
+	} else if (/^[ \n\t]*cnc[ \n\t]*([0-9]+)[ \n\t]*$/.test(line)) {
 		var dt = line.match(/^[ \n\t]*cnc[ \n\t]*([0-9]+)[ \n\t]*$/);
 		n = parseInt(dt[1]);
-		if (cnch[n] != undefined){
-		var dat = rep(cnch[n]);
-		}
-		else{
+		if (cnch[n] != undefined) {
+			var dat = rep(cnch[n]);
+		} else {
 			var dat = [];
 		}
-		if (n == 2){
+		if (n == 2) {
 			console.log(dat[0]['dt']);
-		}
-		else if (n == 3){
+		} else if (n == 3) {
 			console.error(dat[0]['dt']);
-		}
-		else if (n == 4){
+		} else if (n == 4) {
 			alert(dat[0]['dt']);
-		}
-		else if(n == 5){
-			error(dat[0]['dt'],dat[1]['dt']);
-		}
-		else if(n == 6){
-			if(dat[0]["type"] == "string"){
+		} else if (n == 5) {
+			error(dat[0]['dt'], dat[1]['dt']);
+		} else if (n == 6) {
+			if (dat[0]["type"] == "string") {
 				var v = dat[0]["dt"].charAt(parseInt(dat[1]["dt"]));
-				if (v == ""){
-					error("KeyError","No such key.")
+				if (v == "") {
+					error("KeyError", "No such key.")
 				}
-				cvar("dat","string",v,{})
+				cvar("dat", "string", v, {})
+			} else if (dat[0]["type"] == "list") {
+				var v = dat[0]['headers']['ld'][parseInt(dat[1]["dt"])];
+				cvar("dat", v['type'], v['dt'], basehead);
+			} else if (dat[0]["type"] == "map") {
+				var k = dat[1]['dt'];
+				var v = dat[0]['headers']['ld'][k];
+				cvar("dat", v['type'], v['dt'], basehead);
+			} else {
+				error("TypeError", "Type is not available for @defaults.item.")
 			}
-				else if(dat[0]["type"] == "list"){
-					var v = dat[0]['headers']['ld'][parseInt(dat[1]["dt"])];
-					cvar("dat",v['type'],v['dt'],basehead);
-				}
-					else if (dat[0]["type"] == "map"){
-						var k = dat[1]['dt'];
-						var v = dat[0]['headers']['ld'][k];
-						cvar("dat",v['type'],v['dt'],basehead);
-					}
-			else{
-				error("TypeError","Type is not available for @defaults.item.")
-			}
-		}
-		else if(n == 7){
-			if(dat[0]['type'] == "map"){
+		} else if (n == 7) {
+			if (dat[0]['type'] == "map") {
 				var md = dat[0]['headers']['ld'];
 				md[dat[1]['dt']] = dat[2];
 				var hd = dat[0]['headers'];
 				hd["ld"] = md;
-				cvar("dat","map",dat[0]['dt'],hd);
+				cvar("dat", "map", dat[0]['dt'], hd);
+			} else {
+				error('TypeError', "Cannot Set item of unknown type.")
 			}
-			else{
-				error('TypeError',"Cannot Set item of unknown type.")
-			}
-		}
-		else if(n == 8){
-			dtdt = typeify("`"+document.title.toString()+"`");
-			cvar("dat","string",dtdt['dt'],dtdt['headers']);
-		}
-		else if(n == 9){
-			dtdt = typeify("`"+document.documentElement.innerHTML+"`");
-			cvar("dat","string",dtdt['dt'],dtdt['headers']);
-		}
-		else if(n == 10){
-			if(dat[0]['dt'] == 'id'){
+		} else if (n == 8) {
+			dtdt = typeify("`" + document.title.toString() + "`");
+			cvar("dat", "string", dtdt['dt'], dtdt['headers']);
+		} else if (n == 9) {
+			dtdt = typeify("`" + document.documentElement.innerHTML + "`");
+			cvar("dat", "string", dtdt['dt'], dtdt['headers']);
+		} else if (n == 10) {
+			if (dat[0]['dt'] == 'id') {
 				var i = document.getElementById(dat[1]["dt"]);
-			}
-			else{
+			} else {
 				var i = document.querySelector(dat[1]['dt']);
 			}
-			if(dat[2]['dt'] == 'innerHTML'){
-				cvar("dat","string",i.innerHTML,basehead);
+			if (dat[2]['dt'] == 'innerHTML') {
+				cvar("dat", "string", i.innerHTML, basehead);
+			} else {
+				cvar("dat", "string", i.getAttribute(dat[2]['dt']), basehead);
 			}
-			else{
-				cvar("dat","string",i.getAttribute(dat[2]['dt']),basehead);
-			}
-		}
-		else if(n == 11){
-			if(dat[0]['dt'] == 'id'){
+		} else if (n == 11) {
+			if (dat[0]['dt'] == 'id') {
 				var i = document.getElementById(dat[1]["dt"]);
-			}
-			else{
+			} else {
 				var i = document.querySelector(dat[1]['dt']);
 			}
-			if(dat[2]['dt'] == 'innerHTML'){
+			if (dat[2]['dt'] == 'innerHTML') {
 				i.innerHTML = dat[3]['dt'];
-				cvar("dat","string",i.innerHTML,basehead);
+				cvar("dat", "string", i.innerHTML, basehead);
+			} else {
+				i.setAttribute(dat[2]['dt'], dat[3]['dt']);
 			}
-			else{
-				i.setAttribute(dat[2]['dt'],dat[3]['dt']);
-			}
-		}
-		else if(n == 12){
+		} else if (n == 12) {
 			var e = document.createElement(dat[0]['dt']);
-			if(dat[1]['dt'] == 'id'){
+			if (dat[1]['dt'] == 'id') {
 				var i = document.getElementById(dat[2]["dt"]);
-			}
-			else{
+			} else {
 				var i = document.querySelector(dat[2]['dt']);
 			}
-			if(dat[3]['dt'] == 'id'){
+			if (dat[3]['dt'] == 'id') {
 				e.id = dat[4]['dt'];
-			}
-			else{
-				e.setAttribute(dat[3]['dt'],dat[4]['dt']);
+			} else {
+				e.setAttribute(dat[3]['dt'], dat[4]['dt']);
 			}
 			i.appendChild(e);
-		}
-		else if(n == 13){
-			cvar("dat","string",dat[0]['type'],basehead);
-		}
-		else if(n == 14){
-			cvar("dat","string",dat[0]['dt']+dat[1]['dt'],basehead);
-		}
-		else if(n == 15){
+		} else if (n == 13) {
+			cvar("dat", "string", dat[0]['type'], basehead);
+		} else if (n == 14) {
+			cvar("dat", "string", dat[0]['dt'] + dat[1]['dt'], basehead);
+		} else if (n == 15) {
 			document.cookie = `${dat[0]['dt']}=${dat[1]['dt']}; expires=${dat[2]['dt']}; path=${dat[3]['dt']};`;
-		}
-		else if(n == 16){
-			cvar("dat","string",getCookie(dat[0]['dt']),basehead);
-		}
-		else if(n == 17){
+		} else if (n == 16) {
+			cvar("dat", "string", getCookie(dat[0]['dt']), basehead);
+		} else if (n == 17) {
 			const d = new Date();
-			if(dat[0]['dt'] == 'sec'){
+			if (dat[0]['dt'] == 'sec') {
 				var ty = "int";
 				var dta = d.getSeconds();
-			}
-			else if(dat[0]['dt'] == 'min'){
+			} else if (dat[0]['dt'] == 'min') {
 				var ty = "int";
 				var dta = d.getMinutes();
-			}
-			else if(dat[0]['dt'] == 'hr'){
+			} else if (dat[0]['dt'] == 'hr') {
 				var ty = "int";
 				var dta = d.getHours();
-			}
-			else if(dat[0]['dt'] == "mon"){
+			} else if (dat[0]['dt'] == "mon") {
 				var ty = "int";
 				var dta = d.getMonth() + 1;
-			}
-			else if(dat[0]['dt'] == 'monn'){
+			} else if (dat[0]['dt'] == 'monn') {
 				var l = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 				var ty = "string";
 				var dta = l[d.getMonth()];
-			}
-			else if(dat[0]['dt'] == "date"){
+			} else if (dat[0]['dt'] == "date") {
 				var ty = "int";
 				var dta = d.getDate();
-			}
-			else if(dat[0]['dt'] == "year"){
+			} else if (dat[0]['dt'] == "year") {
 				var ty = "int";
 				var dta = d.getFullYear();
 			}
-			cvar("dat",ty,dta,basehead);
+			cvar("dat", ty, dta, basehead);
 		}
 		cnch[n] = [];
-	}
-	else if (/^[ \n\t]*cnch[ \n\t]*([0-9]+)[ \n\t]+([^]+)[ \n\t]*$/.test(line)){
+	} else if (/^[ \n\t]*cnch[ \n\t]*([0-9]+)[ \n\t]+([^]+)[ \n\t]*$/.test(line)) {
 		var dt = line.match(/^[ \n\t]*cnch[ \n\t]*([0-9]+)[ \n\t]+([^]+)[ \n\t]*$/);
 		n = parseInt(dt[1]);
-		if(typeof cnch[n] == 'undefined'){
+		if (typeof cnch[n] == 'undefined') {
 			cnch[n] = [];
 		}
 		cnch[n].push(typeify(dt[2]));
-	}
-		else if(/^[ \n\t]*getvars[ \n\t]*$/.test(line)){
-			console.log(vars);
-		}
-	else{
-		if (line.includes('.')){
+	} else if (/^[ \n\t]*getvars[ \n\t]*$/.test(line)) {
+		console.log(vars);
+	} else {
+		if (line.includes('.')) {
 			var ind = rep(typeify(line.split(".")[0]));
 			var c = 0;
 			var ov = rep(vars);
-			for(item of line.split(".")){
-				if (c == line.split(".").length-1){
+			for (item of line.split(".")) {
+				if (c == line.split(".").length - 1) {
 					d['retd'] = ind[item];
 				}
-				if (c == 0){
-				ind = ind["headers"]["rd"];
-				}
-				else{
+				if (c == 0) {
+					ind = ind["headers"]["rd"];
+				} else {
 					ind = ind[item]["headers"]["rd"];
 				}
 				c += 1;
 			}
-		}
-		else if (vars[line.replace(/[ \n\t]*/g,'')] != undefined){
-			d['retd'] = vars[line.replace(/[ \n\t]*/g,'')];
-		}
-		else{
-			typeify(line,true)
+		} else if (vars[line.replace(/[ \n\t]*/g, '')] != undefined) {
+			d['retd'] = vars[line.replace(/[ \n\t]*/g, '')];
+		} else {
+			typeify(line, true)
 		}
 	}
 }
-function ev(code){
+
+function ev(code) {
 	code = htmlDecode(code);
-	code = code.replace(/[ \n\t]*\/#[^]*#\/[ \n\t]*/g,'');
-	code = code.replace(/\/\/[^\n]*/g,'')
-	code = ap(code,";");
-	code = code.replace(/[ \n\t]*\)[ \n\t]*{[ \n\t]*/g,'){;');
-	code = code.replace(/[ \n\t]*else[ \n\t]*{[ \n\t]*/g,'else{;');
+	code = code.replace(/[ \n\t]*\/#[^]*#\/[ \n\t]*/g, '');
+	code = code.replace(/\/\/[^\n]*/g, '')
+	code = ap(code, ";");
+	code = code.replace(/[ \n\t]*\)[ \n\t]*{[ \n\t]*/g, '){;');
+	code = code.replace(/[ \n\t]*else[ \n\t]*{[ \n\t]*/g, 'else{;');
 	var cd = code.split(/[ \n\t]*;[ \n\t]*/);
-	code = replaceAll(code,'\\c',';');
+	code = replaceAll(code, '\\c', ';');
 	var cnt = 1;
-	for (line of cd){
-		line = replaceAll(line,'\\c',";");
-		if (d['atcc'] == 0){
+	for (line of cd) {
+		line = replaceAll(line, '\\c', ";");
+		if (d['atcc'] == 0) {
 			var op = rep(d['prevt']);
 			var oifs = rep(d['ifs']);
 			evaluate(line);
-			if(op && d['prevt']){
+			if (op && d['prevt']) {
 				d['prevt'] = false;
 			}
-			if(oifs && d['ifs']){
+			if (oifs && d['ifs']) {
 				d['ifs'] = false;
 			}
-	}
-	else{
-		for (item of line.split('')){
-			if (item == '{'){
-				d['atcc'] += 1;
+		} else {
+			for (item of line.split('')) {
+				if (item == '{') {
+					d['atcc'] += 1;
+				}
+				if (item == '}') {
+					d['atcc'] -= 1;
+				}
 			}
-			if(item == '}'){
-				d['atcc'] -= 1;
-			}
-		}
-		if (d['atcc'] == 0){
-				d['atc'](d['atcdat'],d['atcd'],line);
+			if (d['atcc'] == 0) {
+				d['atc'](d['atcdat'], d['atcd'], line);
 				d['atcdat'] = ''
 				d['atct'] = []
 				d['atcc'] = 0
-				evaluate(line.replace(/[ \n\t]*}[ \n\t]*/,'',1));
+				evaluate(line.replace(/[ \n\t]*}[ \n\t]*/, '', 1));
+			} else {
+				d['atcdat'] += line + ';'
+			}
 		}
-		else{
-		d['atcdat'] += line+';'
-		}
-	}
 	}
 }
 d['su'] = true;
@@ -1014,29 +1224,29 @@ class @date(static){
 	};
 };`);
 d['su'] = false;
-window.onload = function(){
-var dl = [];
-document.querySelectorAll('ev, evolution').forEach(function(item){
-	item.style.display = 'none';
-	if (item.hasAttribute('src')){
-		const xhttp = new XMLHttpRequest();
-		var s = item.getAttribute('src');
-		if (s.split('.').length == 1){
-			s = d['evurl']+'lib/'+s;
+window.onload = function() {
+	var dl = [];
+	document.querySelectorAll('ev, evolution').forEach(function(item) {
+		item.style.display = 'none';
+		if (item.hasAttribute('src')) {
+			const xhttp = new XMLHttpRequest();
+			var s = item.getAttribute('src');
+			if (s.split('.').length == 1) {
+				s = d['evurl'] + 'lib/' + s;
+			}
+			xhttp.open("GET", s, false);
+			xhttp.send();
+			item.innerHTML += xhttp.responseText;
 		}
-  xhttp.open("GET",s,false);
-  xhttp.send();
-  item.innerHTML += xhttp.responseText;
+		dl.push(item);
+	});
+	var q = document.querySelectorAll("[ev-onclick]");
+	for (var i of q) {
+		i.addEventListener('click', function() {
+			ev(this.getAttribute("ev-onclick"));
+		});
 	}
-	dl.push(item);
-});
-var q = document.querySelectorAll("[ev-onclick]");
-for(var i of q){
-	i.addEventListener('click', function() {
-    ev(this.getAttribute("ev-onclick"));
-  });
-}
-dl.forEach(function(item){
-	ev(item.innerHTML);
-});
+	dl.forEach(function(item) {
+		ev(item.innerHTML);
+	});
 }
