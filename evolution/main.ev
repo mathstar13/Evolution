@@ -95,3 +95,99 @@ funct delete(name){
 	cnc15;
 };
 };
+class @date(static){
+	funct sec(){
+		cnch17 'sec';
+		cnc17;
+		return dat;
+	};
+	funct min(){
+		cnch17 'min';
+		cnc17;
+		return dat;
+	};
+	funct hour24(){
+		cnch17 'hr';
+		cnc17;
+		return dat;
+	};
+	funct hour(){
+		cnch17 'hr';
+		cnc17;
+		var ty = " AM";
+		if(dat > 12){
+			var ty = " PM";
+			var dat = dat-12;
+		};
+		return dat.concat(ty);
+	};
+	funct timestr24(){
+		cnch17 'hr';
+		cnc17;
+		var s = dat;
+		var s = s.concat(":");
+		cnch17 'min';
+		cnc17;
+		var s = s.concat(dat);
+		var s = s.concat(":");
+		cnch17 'sec';
+		cnc17;
+		var s = s.concat(dat);
+		return s;
+	};
+	funct timestr(){
+		cnch17 'hr';
+		cnc17;
+		var s = dat;
+		var ty = "AM";
+		if(s > 12){
+			var ty = "PM";
+			var s = s-12;
+		};
+		var s = s.concat(":");
+		cnch17 'min';
+		cnc17;
+		var s = s.concat(dat);
+		var s = s.concat(":");
+		cnch17 'sec';
+		cnc17;
+		var s = s.concat(dat);
+		var s = s.concat(" ");
+		var s = s.concat(ty);
+		return s;
+	};
+	funct month(){
+		cnch17 "mon";
+		cnc17;
+		return dat;
+	};
+	funct monthName(){
+		cnch17 "monn";
+		cnc17;
+		return dat;
+	};
+	funct date(){
+		cnch17 "date";
+		cnc17;
+		return dat;
+	};
+	funct year(){
+		cnch17 "year";
+		cnc17;
+		return dat;
+	};
+	funct datestr(){
+		cnch17 "mon";
+		cnc17;
+		var s = dat;
+		var s = s.concat("/");
+		cnch17 "date";
+		cnc17;
+		var s = s.concat(dat);
+		var s = s.concat("/");
+		cnch17 "year";
+		cnc17;
+		var s = s.concat(dat);
+		return s;
+	};
+};

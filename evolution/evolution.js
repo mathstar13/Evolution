@@ -14,7 +14,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 imitations under the License.
 */
-var ci = 0;
 var pv = {};
 var gvars = {};
 var d = {'atc':function(){},'atcd':[],'atcc':0,'atcdat':'','retd':{"type":"null",'dt':'null','headers':{'null':'null'}},'funct':false,'class':'','evurl':'https://evolution-lang.greatusername.repl.co/evolution/','lc':false,'prevt':false,'ifs':false,'su':false,'class':false,"fname":"@main"};
@@ -204,7 +203,7 @@ function typeify(data,fcmd=false){
 				l.push(typeify(item));
 			}
 			dat = {"type":"list","dt":"<list list>",'headers':{"ld":l}};
-		}
+	}
 	else if(/^[ \n\t]*\{([^]*)\}[ \n\t]*$/.test(data)){
 			var dt = data.match(/^[ \n\t]*\{([^]*)\}[ \n\t]*$/);
 			var l = {};
@@ -214,12 +213,19 @@ function typeify(data,fcmd=false){
 				l[typeify(itv[0])['dt']] = typeify(itv[1]);
 			}
 			dat = {"type":"map","dt":"<map map>",'headers':{"ld":l}};
-		}
-		else if(/^[ \n\t]*([^ ]+)[ \n\t]*\|[ \n\t]*([0-9]+)[ \n\t]*$/.test(data)){
+	}
+	else if(/^[ \n\t]*([^ ]+)[ \n\t]*\|[ \n\t]*([0-9]+)[ \n\t]*$/.test(data)){
 			var dt = data.match(/^[ \n\t]*([^ ]+)[ \n\t]*\|[ \n\t]*([0-9]+)[ \n\t]*$/);
 			dat = pv[d['fname']+'('+dt[1]][dt[2]];
-		}
-		else if(/^([ \n\t]*([^]+)[ \n\t]*([+\-*\/%^])[ \n\t]*([^]+))+$/.test(data)){
+	}
+	else{
+		od = data;
+		data = ap(data,"+");
+		data = ap(data,"-");
+		data = ap(data,"*");
+		data = ap(data,"/");
+		data = ap(data,"^");
+		if(/^([ \n\t]*([^]+)[ \n\t]*([+\-*\/%^])[ \n\t]*([^]+))+$/.test(data)){
 			var dt = data.matchAll(/[ \n\t]*[+\-*\/%^][ \n\t]*/g)
 			for(var i of dt){
 				var dat = data.split(i[0]);
@@ -253,8 +259,9 @@ function typeify(data,fcmd=false){
 				}
 			}
 			dat = {'type':'int','dt':parseInt(data),"headers":{}}
-		}
+	}
 	else{
+		data = od;
 		/*if(data.replace(/[ \n\t]/,'') in vars){
 			return vars[data.replace(/[ \n\t]/,'')];
 		}
@@ -278,6 +285,7 @@ function typeify(data,fcmd=false){
 		dat = rep(d['retd']);
 		d['retd'] = oretd;
 		}
+	}
 	}
 	if (dat["headers"]["rd"] == undefined){
 		dat["headers"]["rd"] = {};
@@ -694,6 +702,39 @@ function evaluate(line){
 		else if(n == 16){
 			cvar("dat","string",getCookie(dat[0]['dt']),basehead);
 		}
+		else if(n == 17){
+			const d = new Date();
+			if(dat[0]['dt'] == 'sec'){
+				var ty = "int";
+				var dta = d.getSeconds();
+			}
+			else if(dat[0]['dt'] == 'min'){
+				var ty = "int";
+				var dta = d.getMinutes();
+			}
+			else if(dat[0]['dt'] == 'hr'){
+				var ty = "int";
+				var dta = d.getHours();
+			}
+			else if(dat[0]['dt'] == "mon"){
+				var ty = "int";
+				var dta = d.getMonth() + 1;
+			}
+			else if(dat[0]['dt'] == 'monn'){
+				var l = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+				var ty = "string";
+				var dta = l[d.getMonth()];
+			}
+			else if(dat[0]['dt'] == "date"){
+				var ty = "int";
+				var dta = d.getDate();
+			}
+			else if(dat[0]['dt'] == "year"){
+				var ty = "int";
+				var dta = d.getFullYear();
+			}
+			cvar("dat",ty,dta,basehead);
+		}
 		cnch[n] = [];
 	}
 	else if (/^[ \n\t]*cnch[ \n\t]*([0-9]+)[ \n\t]+([^]+)[ \n\t]*$/.test(line)){
@@ -875,6 +916,102 @@ funct delete(name){
 	cnch15 "/";
 	cnc15;
 };
+};
+class @date(static){
+	funct sec(){
+		cnch17 'sec';
+		cnc17;
+		return dat;
+	};
+	funct min(){
+		cnch17 'min';
+		cnc17;
+		return dat;
+	};
+	funct hour24(){
+		cnch17 'hr';
+		cnc17;
+		return dat;
+	};
+	funct hour(){
+		cnch17 'hr';
+		cnc17;
+		var ty = " AM";
+		if(dat > 12){
+			var ty = " PM";
+			var dat = dat-12;
+		};
+		return dat.concat(ty);
+	};
+	funct timestr24(){
+		cnch17 'hr';
+		cnc17;
+		var s = dat;
+		var s = s.concat(":");
+		cnch17 'min';
+		cnc17;
+		var s = s.concat(dat);
+		var s = s.concat(":");
+		cnch17 'sec';
+		cnc17;
+		var s = s.concat(dat);
+		return s;
+	};
+	funct timestr(){
+		cnch17 'hr';
+		cnc17;
+		var s = dat;
+		var ty = "AM";
+		if(s > 12){
+			var ty = "PM";
+			var s = s-12;
+		};
+		var s = s.concat(":");
+		cnch17 'min';
+		cnc17;
+		var s = s.concat(dat);
+		var s = s.concat(":");
+		cnch17 'sec';
+		cnc17;
+		var s = s.concat(dat);
+		var s = s.concat(" ");
+		var s = s.concat(ty);
+		return s;
+	};
+	funct month(){
+		cnch17 "mon";
+		cnc17;
+		return dat;
+	};
+	funct monthName(){
+		cnch17 "monn";
+		cnc17;
+		return dat;
+	};
+	funct date(){
+		cnch17 "date";
+		cnc17;
+		return dat;
+	};
+	funct year(){
+		cnch17 "year";
+		cnc17;
+		return dat;
+	};
+	funct datestr(){
+		cnch17 "mon";
+		cnc17;
+		var s = dat;
+		var s = s.concat("/");
+		cnch17 "date";
+		cnc17;
+		var s = s.concat(dat);
+		var s = s.concat("/");
+		cnch17 "year";
+		cnc17;
+		var s = s.concat(dat);
+		return s;
+	};
 };`);
 d['su'] = false;
 window.onload = function(){
