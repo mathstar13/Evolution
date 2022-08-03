@@ -23,6 +23,9 @@ return JSON.parse(JSON.stringify(dt));
 }
 var cnch = {};
 var vars = rep(gvars);
+function reverse(s){
+    return [...s].reverse().join("");
+}
 function escapeRegExp(string) {
   return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
@@ -307,7 +310,7 @@ function ap(text,cchar=','){
 	}
 	text = ''
 	var cnt = 0
-	var lc = {'(':')','[':']','"':'"',"'":"'",'`':'`'}
+	var lc = {'(':')','[':']','"':'"',"'":"'",'`':'`',"<":">"}
 	for (var char of txt){
 		if (latc[0]){
 			if (lc[atct[0]] == char){
@@ -373,6 +376,18 @@ function callfunct(funct,attrib={}){
 		}
 	}*/
 }
+function argparse(i){
+	var att = {};
+	for(item of i.split(/[ \n\t]*,[ \n\t]*/)){
+			if (item.split(/[ \n\t]*=[ \n\t]*/).length != 1){
+				att[item.split(/[ \n\t]*=[ \n\t]*/)[0]] = item.split(/[ \n\t]*=[ \n\t]*/)[1]
+			}
+			else{
+				att[item] = 'null'
+			}
+		}
+	return att;
+}
 function evaluate(line){
 	if(/^([ \n\t]*)$/.test(line)){
 		
@@ -382,15 +397,7 @@ function evaluate(line){
 			cvar(data[0],"funct",`<function ${data[0]} function>`,{'fn':{'attrib':data[1],'code':dt,'head':{}}},!d['class'])
 		}
 		var dt = line.match(/[ \n\t]*funct[ \n\t]+([^\n ]+)[ \n\t]*\(([^]*)\)[ \n\t]*\{$/);
-		var att = {};
-		for(item of dt[2].split(/[ \n\t]*,[ \n\t]*/)){
-			if (item.split(/[ \n\t]*=[ \n\t]*/).length != 1){
-				att[item.split(/[ \n\t]*=[ \n\t]*/)[0]] = item.split(/[ \n\t]*=[ \n\t]*/)[1]
-			}
-			else{
-				att[item] = 'null'
-			}
-		}
+		var att = argparse(dt[2])
 		d['atcd'] = [dt[1],att]
 		d['atcc'] += 1;
 	}
@@ -554,15 +561,6 @@ function evaluate(line){
 		var dt = line.match(/^[ \n\t]*for[ \n\t]*\(([^]*)\)[ \n\t]*\{[ \n\t]*$/);
 		d['atc'] = function(dt,data,tr){
 			var c = 1;
-			/*while(c < 100000){
-				if(typeify(data[0])['dt']){
-				ev(dt);
-				}
-				else{
-					break;
-				}
-				c++;
-			}*/
 			if(data[1]['type'] == 'list'){
 				for(var i of data[1]['headers']['ld']){
 					cvar(data[0],i['type'],i['dt'],i['headers']);
@@ -786,6 +784,18 @@ function ev(code){
 	var cnt = 1;
 	for (line of cd){
 		line = replaceAll(line,'\\c',";");
+		fna = line.split("<");
+		line = rep(fna[0]);
+		delete fna[0];
+		var cnt = 1;
+		fnh = rep(basehead);
+		fnh['fn'] = {'attrib':{},'code':"",'head':{}};
+		for (var i in fna){
+			i = fna[i];
+			fnh['fn']['code'] = reverse(reverse(i).replace(">",""));
+			cvar("@fn"+cnt,"funct","<function anonymous function>",rep(fnh),false,true);
+			cnt += 1;
+		}
 		if (d['atcc'] == 0){
 			var op = rep(d['prevt']);
 			var oifs = rep(d['ifs']);
@@ -796,6 +806,9 @@ function ev(code){
 			if(oifs && d['ifs']){
 				d['ifs'] = false;
 			}
+		for(i=1;i < cnt;i++){
+			delete vars["@fn"+i];
+		}
 	}
 	else{
 		for (item of line.split('')){
@@ -821,6 +834,103 @@ function ev(code){
 }
 d['su'] = true;
 ev(`funct log(txt){
+cnch2 txt;
+cnc2;
+};
+funct error(txt){
+cnch3 txt;
+cnc3;
+};
+funct alert(txt){
+cnch4 txt;
+cnc4;
+};
+funct throw(n,t){
+cnch5 n;
+cnch5 t;
+cnc5;
+};
+class @defaults(static){
+	funct item(self,c){
+	cnch6 self;
+	cnch6 c;
+	cnc6;
+	return dat;
+};
+funct set(self,key,value){
+	cnch7 self;
+	cnch7 key;
+	cnch7 value;
+	cnc7;
+	return dat;
+};
+funct type(self){
+	cnch13 self;
+	cnc13;
+	return dat;
+};
+funct concat(self,string){
+	cnch14 self;
+	cnch14 string;
+	cnc14;
+	return dat;
+};
+};
+class @doc(static){
+	funct title(){
+		cnc8;
+		return dat;
+	};
+	funct HTML(){
+		cnc9;
+		return dat;
+	};
+	funct getElement(sel,retd="innerHTML",seltype="id"){
+		cnch10 seltype;
+		cnch10 sel;
+		cnch10 retd;
+		cnc10;
+		return dat;
+	};
+	funct setElement(sel,value,it="innerHTML",seltype="id"){
+		cnch11 seltype;
+		cnch11 sel;
+		cnch11 it;
+		cnch11 value;
+		cnc11;
+		return dat;
+	};
+	funct createElement(type,tsel,sel,tseltype="id",seltype="id"){
+		cnch12 type;
+		cnch12 seltype;
+		cnch12 sel;
+		cnch12 tseltype;
+		cnch12 tsel;
+		cnc12;
+	};
+};
+class @cookie(static){
+funct set(name,data,exp,path='/'){
+	cnch15 name;
+	cnch15 data;
+	cnch15 exp;
+	cnch15 path;
+	cnc15;
+};
+funct get(name){
+	cnch16 name;
+	cnc16;
+	return dat;
+};
+funct delete(name){
+	cnch15 name;
+	cnch15 "";
+	cnch15 "Thu, 01 Jan 1970 00:00:00 UTC";
+	cnch15 "/";
+	cnc15;
+};
+};
+funct log(txt){
 cnch2 txt;
 cnc2;
 };
@@ -1008,6 +1118,67 @@ class @date(static){
 		var s = s.concat(dat);
 		var s = s.concat("/");
 		cnch17 "year";
+		cnc17;
+		var s = s.concat(dat);
+		return s;
+	};
+	funct str(){
+		cnch17 "mon";
+		cnc17;
+		var s = dat;
+		var s = s.concat("/");
+		cnch17 "date";
+		cnc17;
+		var s = s.concat(dat);
+		var s = s.concat("/");
+		cnch17 "year";
+		cnc17;
+		var s = s.concat(dat);
+		var s = s.concat(" ");
+		cnch17 'hr';
+		cnc17;
+		var ty = "AM";
+		if(dat > 12){
+			var ty = "PM";
+			var s = s.concat(dat-12);
+		};
+		else{
+		var s = s.concat(dat);
+		}
+		var s = s.concat(":");
+		cnch17 'min';
+		cnc17;
+		var s = s.concat(dat);
+		var s = s.concat(":");
+		cnch17 'sec';
+		cnc17;
+		var s = s.concat(dat);
+		var s = s.concat(" ");
+		var s = s.concat(ty);
+		return s;
+	};
+	funct str24(){
+		cnch17 "mon";
+		cnc17;
+		var s = dat;
+		var s = s.concat("/");
+		cnch17 "date";
+		cnc17;
+		var s = s.concat(dat);
+		var s = s.concat("/");
+		cnch17 "year";
+		cnc17;
+		var s = s.concat(dat);
+		var s = s.concat(" ");
+		cnch17 'hr';
+		cnc17;
+		var s = s.concat(dat);
+		var s = s.concat(":");
+		cnch17 'min';
+		cnc17;
+		var s = s.concat(dat);
+		var s = s.concat(":");
+		cnch17 'sec';
 		cnc17;
 		var s = s.concat(dat);
 		return s;

@@ -190,4 +190,65 @@ class @date(static){
 		var s = s.concat(dat);
 		return s;
 	};
+	funct str(){
+		cnch17 "mon";
+		cnc17;
+		var s = dat;
+		var s = s.concat("/");
+		cnch17 "date";
+		cnc17;
+		var s = s.concat(dat);
+		var s = s.concat("/");
+		cnch17 "year";
+		cnc17;
+		var s = s.concat(dat);
+		var s = s.concat(" ");
+		cnch17 'hr';
+		cnc17;
+		var ty = "AM";
+		if(dat > 12){
+			var ty = "PM";
+			var s = s.concat(dat-12);
+		};
+		else{
+		var s = s.concat(dat);
+		}
+		var s = s.concat(":");
+		cnch17 'min';
+		cnc17;
+		var s = s.concat(dat);
+		var s = s.concat(":");
+		cnch17 'sec';
+		cnc17;
+		var s = s.concat(dat);
+		var s = s.concat(" ");
+		var s = s.concat(ty);
+		return s;
+	};
+	funct str24(){
+		cnch17 "mon";
+		cnc17;
+		var s = dat;
+		var s = s.concat("/");
+		cnch17 "date";
+		cnc17;
+		var s = s.concat(dat);
+		var s = s.concat("/");
+		cnch17 "year";
+		cnc17;
+		var s = s.concat(dat);
+		var s = s.concat(" ");
+		cnch17 'hr';
+		cnc17;
+		var s = s.concat(dat);
+		var s = s.concat(":");
+		cnch17 'min';
+		cnc17;
+		var s = s.concat(dat);
+		var s = s.concat(":");
+		cnch17 'sec';
+		cnc17;
+		var s = s.concat(dat);
+		return s;
+	};
 };
