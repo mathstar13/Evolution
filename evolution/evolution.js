@@ -793,6 +793,11 @@ function ev(code){
 		for (var i in fna){
 			i = fna[i];
 			fnh['fn']['code'] = reverse(reverse(i).replace(">",""));
+			if(/^[ \n\t]*fnargs:([^]*):fnargs/.test(fnh['fn']['code'])){
+				var args = fnh['fn']['code'].match(/^[ \n\t]*fnargs:([^]*):fnargs/)[1];
+				fnh['fn']['attrib'] = argparse(args);
+				fnh['fn']['code'] = fnh['fn']['code'].replace(/^[ \n\t]*fnargs:([^]*):fnargs/,"");
+			}
 			cvar("@fn"+cnt,"funct","<function anonymous function>",rep(fnh),false,true);
 			cnt += 1;
 		}

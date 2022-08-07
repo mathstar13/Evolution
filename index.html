@@ -9,21 +9,14 @@
   </head>
   <body>
 	  <p id='test'>H</p>
-	  <button ev-onclick='@doc.setElement("test","nbbls:tnbspnk","innerHTML","id");'>PRESS</button>
-	<ev>
-funct fn(fnct,fnc){
-	fnct();
-	fnc();
-};
-fn(@fn2,@fn1)<
-	log("Hello!");
-><
-	log("HI");
+	  <button ev-onclick='@doc.setElement("test","pressed!","innerHTML","id");'>PRESS</button>
+	  <ev>
+	  var f = @fn1<
+fnargs:a,b:fnargs
+	log(a);
+	log(b);
 >;
-var a = @fn1<
-	log("AN");
->;
-a()
+		f("B",'C');  
 	</ev>
   </body>
 </html>
