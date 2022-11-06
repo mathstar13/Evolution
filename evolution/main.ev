@@ -252,3 +252,7 @@ class @date(static){
 		return s;
 	};
 };
+funct @lib(name){
+	cnch18 name;
+	cnc18;
+};

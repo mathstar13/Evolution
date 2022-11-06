@@ -8,15 +8,29 @@
     <link href="style.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
-	  <p id='test'>H</p>
-	  <button ev-onclick='@doc.setElement("test","pressed!","innerHTML","id");'>PRESS</button>
+	  <p id='test'>0</p>
+	  <button ev-onclick='var cnt = cnt + 1;@doc.setElement("test",cnt,"innerHTML","id");'>PRESS</button>
+	  <p>Visit our documentation at <a href="https://evolution.readthedocs.io/en/latest/" target="_blank">readthedocs</a>.</p>
 	  <ev>
-	  var f = @fn1<
-fnargs:a,b:fnargs
-	log(a);
-	log(b);
->;
-		f("B",'C');  
-	</ev>
+/# class std(static){
+	funct jsdep(name,regex,callback){
+		  
+	};
+};
+	  @fn1()<
+	log("ASDF");
+	log("GHJKL");
+>; #/
+funct b(){
+	log();
+};
+funct a(){
+	var z = "HIII";
+	var test = ["lc"];
+	b()[hv=test];
+	log(z);
+};
+a();
+	  </ev>
   </body>
 </html>
